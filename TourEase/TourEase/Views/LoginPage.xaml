@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="TourEase.Views.LoginPage">
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Sign Up" Command="{Binding NavigateToSignUpCommand}"/>
+    </ContentPage.ToolbarItems>
+
+    <ContentPage.Content>
+        <ScrollView>
+            <StackLayout Padding="25, 0">
+                <StackLayout VerticalOptions="Start">
+                    <Label VerticalOptions="Center" HorizontalOptions="CenterAndExpand" Text="Tour" FontSize="Title" TextColor="#FA4248"/>
+                    <Label VerticalOptions="Start" HorizontalOptions="CenterAndExpand" Text="Ease" FontSize="Large" TextColor="Black" />
+                </StackLayout>
+
+                <StackLayout VerticalOptions="CenterAndExpand">
+                    <Label HorizontalOptions="Start" Text="Email" FontSize="Small" TextColor="#7F7F7F"/>
+                    <Entry Text="{Binding User.Email}" HorizontalOptions="FillAndExpand" />
+                    <Label HorizontalOptions="Start" Text="Password" FontSize="Small" TextColor="#7F7F7F"/>
+                    <Entry Text="{Binding User.Password}" HorizontalOptions="FillAndExpand"  IsPassword="True"/>
+                    <!--<Label HorizontalOptions="End" Text="Forgot Password?"/>-->
+                    <Button HorizontalOptions="FillAndExpand" Text="Sign In" BackgroundColor="#FA4248" TextColor="White" Command="{Binding LoginCommand}"/>
+                </StackLayout>
+                <StackLayout Orientation="Horizontal" VerticalOptions="EndAndExpand" HorizontalOptions="CenterAndExpand" Padding="0, 0, 0, 20">
+                    <Label HorizontalOptions="Center" Text="Need an Account?"/>
+                    <Label HorizontalOptions="Start" Text="Sign Up" TextColor="#FA4248">
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding NavigateToSignUpCommand}"/>
+                        </Label.GestureRecognizers>
+                    </Label>
+                </StackLayout>
+            </StackLayout>
+        </ScrollView>
+    </ContentPage.Content>
+</ContentPage>

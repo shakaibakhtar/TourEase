@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="TourEase.Views.RegisterPage">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Sign In" Command="{Binding NavigateToSignInCommand}"/>
+    </ContentPage.ToolbarItems>
+
+    <ContentPage.Content>
+        <ScrollView>
+            <StackLayout Padding="25, 0">
+                <StackLayout VerticalOptions="Start">
+                    <Label VerticalOptions="Center" HorizontalOptions="CenterAndExpand" Text="Tour" FontSize="Title" TextColor="#FA4248"/>
+                    <Label VerticalOptions="Center" HorizontalOptions="CenterAndExpand" Text="Ease" FontSize="Medium" TextColor="Black"/>
+                </StackLayout>
+
+                <StackLayout VerticalOptions="CenterAndExpand">
+                    <Label HorizontalOptions="Start" Text="Full Name" FontSize="Small" TextColor="#7F7F7F"/>
+                    <Entry Text="{Binding User.Full_Name}" HorizontalOptions="FillAndExpand"/>
+                    <Label HorizontalOptions="Start" Text="Email" FontSize="Small" TextColor="#7F7F7F"/>
+                    <Entry Text="{Binding User.Email}" HorizontalOptions="FillAndExpand" Keyboard="Email"/>
+                    <Label HorizontalOptions="Start" Text="Password" FontSize="Small" TextColor="#7F7F7F"/>
+                    <Entry Text="{Binding User.Password}" HorizontalOptions="FillAndExpand" IsPassword="True"/>
+                    <Label HorizontalOptions="Start" Text="Contact Number" FontSize="Small" TextColor="#7F7F7F"/>
+                    <Entry Text="{Binding User.Contact_Number}" HorizontalOptions="FillAndExpand" Keyboard="Telephone"/>
+                    <Label HorizontalOptions="Start" Text="City" FontSize="Small" TextColor="#7F7F7F"/>
+                    <Entry Text="{Binding User.Location_City}" HorizontalOptions="FillAndExpand"/>
+                    <Label HorizontalOptions="Start" Text="Area" FontSize="Small" TextColor="#7F7F7F"/>
+                    <Entry Text="{Binding User.Location_Area}" HorizontalOptions="FillAndExpand"/>
+                    <Label HorizontalOptions="Start" Text="User_Type" FontSize="Small" TextColor="#7F7F7F"/>
+                    <Picker Title="Select User Type" ItemsSource="{Binding UserTypes}" ItemDisplayBinding="{Binding UserTypeName}" SelectedItem="{Binding SelectedUserType, Mode=TwoWay}"/>
+
+                    <Button HorizontalOptions="FillAndExpand" Text="Sign Up" BackgroundColor="#FA4248" TextColor="White" Command="{Binding SignUpCommand}"/>
+                </StackLayout>
+
+                <StackLayout Orientation="Horizontal" VerticalOptions="EndAndExpand" HorizontalOptions="CenterAndExpand" Padding="0, 0, 0, 20">
+                    <Label HorizontalOptions="Center" Text="Already have account?"/>
+                    <Label HorizontalOptions="Start" Text="Sign In" TextColor="#FA4248">
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding NavigateToSignInCommand}"/>
+                        </Label.GestureRecognizers>
+                    </Label>
+                </StackLayout>
+            </StackLayout>
+        </ScrollView>
+    </ContentPage.Content>
+</ContentPage>

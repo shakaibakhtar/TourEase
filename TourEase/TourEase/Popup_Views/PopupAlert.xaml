@@ -1,0 +1,63 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<pages:PopupPage xmlns="http://xamarin.com/schemas/2014/forms"
+                 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                 xmlns:pages="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"
+                 xmlns:animations="clr-namespace:Rg.Plugins.Popup.Animations;assembly=Rg.Plugins.Popup"
+                 x:Class="TourEase.Popup_Views.PopupAlert">
+    <!--You can set an animation in the xaml file or in the csharp code behind-->
+    <pages:PopupPage.Animation>
+        <animations:ScaleAnimation 
+            PositionIn="Center"
+            PositionOut="Center"
+            ScaleIn="1.2"
+            ScaleOut="0.8"
+            DurationIn="400"
+            DurationOut="300"
+            EasingIn="SinOut"
+            EasingOut="SinIn"
+            HasBackgroundAnimation="True"/>
+    </pages:PopupPage.Animation>
+    <!--You can use any elements here which are extended from Xamarin.Forms.View-->
+    <StackLayout 
+        VerticalOptions="CenterAndExpand" 
+        HorizontalOptions="CenterAndExpand"
+        BackgroundColor="White"
+        Margin="30"
+        Padding="10, 20, 10, 10">
+        <Image HorizontalOptions="Center" HeightRequest="50" Source="{Binding Image}"/>
+
+        <!--<Label HorizontalOptions="Center" FontFamily="Medium" Text="{Binding Title}" TextColor="Black">
+                <Label.Triggers>
+                    <DataTrigger TargetType="Label" Binding="{Binding Title,TargetNullValue=''}" Value="">
+                        <Setter Property="IsVisible" Value="False"/>
+                    </DataTrigger>
+                </Label.Triggers>
+            </Label>-->
+
+        <Label HorizontalTextAlignment="Center" HorizontalOptions="Center" FontAttributes="None" Text="{Binding Description}" TextColor="Black">
+            <Label.Triggers>
+                <DataTrigger TargetType="Label" Binding="{Binding Description,TargetNullValue=''}" Value="">
+                    <Setter Property="IsVisible" Value="False"/>
+                </DataTrigger>
+            </Label.Triggers>
+        </Label>
+
+        <Button x:Name="OkButton" Command="{Binding OkCommand}" Padding="0" FontAttributes="Bold" FontSize="Large" BackgroundColor="Transparent" Text="{Binding ButtonText}">
+            <Button.Triggers>
+                <DataTrigger TargetType="Button" Binding="{Binding Image}" Value="tick.png">
+                    <Setter Property="TextColor" Value="#8ABD40"/>
+                </DataTrigger>
+                <DataTrigger TargetType="Button" Binding="{Binding Image}" Value="crossRed.png">
+                    <Setter Property="TextColor" Value="#DD4F43"/>
+                </DataTrigger>
+                <DataTrigger TargetType="Button" Binding="{Binding Image}" Value="info.png">
+                    <Setter Property="TextColor" Value="#17A2B8"/>
+                </DataTrigger>
+                <DataTrigger TargetType="Button" Binding="{Binding Image}" Value="warning.png">
+                    <Setter Property="TextColor" Value="#FFC107"/>
+                </DataTrigger>
+            </Button.Triggers>
+        </Button>
+
+    </StackLayout>
+</pages:PopupPage>

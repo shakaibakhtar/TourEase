@@ -1,0 +1,55 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="TourEase.Views.HomePage"
+             Title="{Binding HomeTitle}">
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Advanced Search" Order="Secondary" Command="{Binding AdvancedSearchCommand}"/>
+        <ToolbarItem Text="Logout" Order="Secondary" Command="{Binding LogoutCommand}"/>
+    </ContentPage.ToolbarItems>
+    
+    <ContentPage.Content>
+        <CollectionView x:Name="GuestsHostsList" ItemsSource="{Binding GuestsHostsList}" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+            <CollectionView.ItemsLayout>
+                <GridItemsLayout Orientation="Vertical" VerticalItemSpacing="10" />
+            </CollectionView.ItemsLayout>
+            
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <StackLayout Orientation="Horizontal" Padding="10" Spacing="20">
+                        <Frame WidthRequest="40" HeightRequest="40" CornerRadius="10" Padding="0" VerticalOptions="CenterAndExpand" HorizontalOptions="Start">
+                            <Image Source="avatar.png" Aspect="AspectFit" VerticalOptions="CenterAndExpand"/>
+                        </Frame>
+                            <StackLayout Orientation="Vertical">
+                            <Label Text="{Binding Full_Name}" HorizontalOptions="StartAndExpand"/>
+                            <Label HorizontalOptions="StartAndExpand">
+                                <Label.FormattedText>
+                                    <FormattedString>
+                                        <FormattedString.Spans>
+                                            <Span Text="{Binding Location_City}"/>
+                                            <Span Text=" - "/>
+                                            <Span Text="{Binding Location_Area}"/>
+                                        </FormattedString.Spans>
+                                    </FormattedString>
+                                </Label.FormattedText>
+                            </Label>
+                        </StackLayout>
+                        <!--<StackLayout Orientation="Vertical">-->
+                            <!--<Label Text="{Binding Location_Area}" HorizontalOptions="StartAndExpand"/>-->
+                            <!--<Label Text="{Binding Contact_Number}" HorizontalOptions="StartAndExpand"/>
+                            <Label Text="{Binding Email}" HorizontalOptions="StartAndExpand"/>-->
+                            <!--<Label Text="{Binding Fake_Reported_Count}" HorizontalOptions="StartAndExpand"/>-->
+                        <!--</StackLayout>-->
+
+                        <!--<Button Text="asd" Command="{Binding BindingContext.DeleteEducationCommand, Source={x:Reference GuestsHostsList}}" CommandParameter="{Binding .}" HorizontalOptions="EndAndExpand"/>-->
+
+                        <!--<StackLayout.GestureRecognizers>
+                            <TapGestureRecognizer NumberOfTapsRequired="1" Command="{Binding BindingContext.EditEducationCommand, Source={x:Reference GuestsHostsList}}" CommandParameter="{Binding .}"/>
+                        </StackLayout.GestureRecognizers>-->
+                    </StackLayout>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </ContentPage.Content>
+</ContentPage>
