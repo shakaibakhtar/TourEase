@@ -151,6 +151,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\clsRequest.cs" />
     <Compile Include="Models\clsUser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="tblGuestRequest.cs">

@@ -1,17 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="TourEase.Views.HomePage"
-             Title="{Binding HomeTitle}">
-
-    <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Advanced Search" Order="Secondary" Command="{Binding GotoAdvancedSearchCommand}"/>
-        <ToolbarItem Text="Logout" Order="Secondary" Command="{Binding LogoutCommand}"/>
-    </ContentPage.ToolbarItems>
-
+             x:Class="TourEase.Views.RequestsListPage"
+             Title="{Binding Title}">
     <ContentPage.Content>
         <RefreshView IsRefreshing="{Binding IsRefreshing}" Command="{Binding RefreshGuestsHostsListCommand}">
-            <CollectionView x:Name="GuestsHostsList" ItemsSource="{Binding SearchableList}" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+            <CollectionView x:Name="RequestsList" ItemsSource="{Binding RequestsList}" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
                 <CollectionView.ItemsLayout>
                     <GridItemsLayout Orientation="Vertical" VerticalItemSpacing="10" />
                 </CollectionView.ItemsLayout>

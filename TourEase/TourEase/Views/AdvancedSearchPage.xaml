@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="TourEase.Views.AdvancedSearchPage"
+             Title="Advanced Search">
+    <ContentPage.Content>
+        <ScrollView>
+            <StackLayout Padding="20, 10, 20, 5" Spacing="10">
+                <StackLayout>
+                    <Label Text="Full Name" TextColor="#717171"/>
+                    <Entry Text="{Binding FullName, TargetNullValue='', Mode=TwoWay}" FontSize="Small" HorizontalOptions="FillAndExpand"/>
+                </StackLayout>
+
+                <StackLayout>
+                    <Label Text="City" TextColor="#717171"/>
+                    <Picker ItemsSource="{Binding Cities}" HorizontalOptions="FillAndExpand" FontSize="Small" SelectedItem="{Binding SelectedCity}"/>
+                </StackLayout>
+
+                <StackLayout>
+                    <Label Text="Area" TextColor="#717171"/>
+                    <Picker ItemsSource="{Binding Areas}" HorizontalOptions="FillAndExpand" FontSize="Small" SelectedItem="{Binding SelectedArea}"/>
+                </StackLayout>
+
+                <StackLayout>
+                    <Label Text="Contact" TextColor="#717171"/>
+                    <Entry Text="{Binding Contact, TargetNullValue='', Mode=TwoWay}" FontSize="Small" HorizontalOptions="FillAndExpand"/>
+                </StackLayout>
+
+
+                <Button Command="{Binding AdvanceSearchCommand}" Text="Search" HorizontalOptions="CenterAndExpand"/>
+            </StackLayout>
+        </ScrollView>
+    </ContentPage.Content>
+</ContentPage>

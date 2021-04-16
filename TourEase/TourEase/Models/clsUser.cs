@@ -114,9 +114,22 @@ namespace TourEase.Models
             }
         }
 
+        bool? _Is_Verified;
+        public bool? Is_Verified
+        {
+            get => _Is_Verified;
+            set
+            {
+                if (value != null)
+                    _Is_Verified = value;
+                OnPropertyChanged();
+            }
+        }
+
         public clsUser()
         {
             Fake_Reported_Count = 0;
+            Is_Verified = false;
         }
     }
 }

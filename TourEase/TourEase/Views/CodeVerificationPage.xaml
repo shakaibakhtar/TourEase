@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="TourEase.Views.CodeVerificationPage"
+             NavigationPage.HasNavigationBar="True"
+             Title="Verification">
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Logout" Order="Primary" Command="{Binding LogoutCommand}"/>
+    </ContentPage.ToolbarItems>
+
+    <ContentPage.Content>
+        <ScrollView>
+            <StackLayout Padding="20" HorizontalOptions="FillAndExpand">
+                <Frame CornerRadius="100" 
+                       HeightRequest="100"
+                       WidthRequest="100"
+                       HorizontalOptions="Center"
+                       VerticalOptions="Start"
+                       Padding="20, 25, 10, 20"
+                       IsClippedToBounds="True">
+                    <Image Source="otp.png" HorizontalOptions="Center" WidthRequest="100" HeightRequest="100"></Image>
+                </Frame>
+                <Label Text="Enter Code" Margin="0, 20, 0, 0"/>
+                <Entry Placeholder="1234" Text="{Binding LocalVerificationCode, Mode=TwoWay}" FontFamily="Regular" Keyboard="Numeric" HorizontalOptions="FillAndExpand"/>
+                <Label FontSize="Small" HorizontalOptions="EndAndExpand" Margin="0,0,0,20">
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <FormattedString.Spans>
+                                <Span Text="Did'nt receive OTP? "/>
+                                <Span Text="Resend Code" TextDecorations="Underline">
+                                    <Span.GestureRecognizers>
+                                        <TapGestureRecognizer NumberOfTapsRequired="1" Command="{Binding ResendCodeCommand}"/>
+                                    </Span.GestureRecognizers>
+                                </Span>
+                            </FormattedString.Spans>
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
+                <Button Text="Next" HorizontalOptions="Center" Command="{Binding VerifyCodeCommand}"/>
+            </StackLayout>
+        </ScrollView>
+    </ContentPage.Content>
+</ContentPage>

@@ -1,7 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="TourEase.Views.LoginPage">
+             x:Class="TourEase.Views.LoginPage"
+             Title="TourEase">
 
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="Sign Up" Command="{Binding NavigateToSignUpCommand}"/>
@@ -20,7 +21,11 @@
                     <Entry Text="{Binding User.Email}" HorizontalOptions="FillAndExpand" />
                     <Label HorizontalOptions="Start" Text="Password" FontSize="Small" TextColor="#7F7F7F"/>
                     <Entry Text="{Binding User.Password}" HorizontalOptions="FillAndExpand"  IsPassword="True"/>
-                    <!--<Label HorizontalOptions="End" Text="Forgot Password?"/>-->
+                    <Label HorizontalOptions="End" Text="Forgot Password?">
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer NumberOfTapsRequired="1" Command="{Binding GotoForgotPasswordCommand}"/>
+                        </Label.GestureRecognizers>
+                    </Label>
                     <Button HorizontalOptions="FillAndExpand" Text="Sign In" BackgroundColor="#FA4248" TextColor="White" Command="{Binding LoginCommand}"/>
                 </StackLayout>
                 <StackLayout Orientation="Horizontal" VerticalOptions="EndAndExpand" HorizontalOptions="CenterAndExpand" Padding="0, 0, 0, 20">

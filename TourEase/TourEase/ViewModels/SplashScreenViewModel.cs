@@ -18,15 +18,16 @@ namespace TourEase.ViewModels
 
             Task.Run(async () =>
             {
-                clsUser user = new clsUser();
-                user.Email = await SecureStorageClass.GetValueAgainstKey(SecureStorageClass.keyUserEmail);
-                user.Password = await SecureStorageClass.GetValueAgainstKey(SecureStorageClass.keyUserPassword);
+                LoginViewModel loginVM = new LoginViewModel(navigation);
+                loginVM.User = new clsUser();
+                loginVM.User.Email = await SecureStorageClass.GetValueAgainstKey(SecureStorageClass.keyUserEmail);
+                loginVM.User.Password = await SecureStorageClass.GetValueAgainstKey(SecureStorageClass.keyUserPassword);
 
                 ApiCalls api = new ApiCalls(navigation);
 
-                if ((!string.IsNullOrEmpty(user.Email)) && (!string.IsNullOrWhiteSpace(user.Email)))
+                if ((!string.IsNullOrEmpty(loginVM.User.Email)) && (!string.IsNullOrWhiteSpace(loginVM.User.Email)))
                 {
-                    if (await api.LoginUser(user))
+                    if (await loginVM.Login())
                     {
                         Device.BeginInvokeOnMainThread(() =>
                         {
@@ -40,7 +41,7 @@ namespace TourEase.ViewModels
                     SecureStorageClass.ClearAll();
                     Device.BeginInvokeOnMainThread(() =>
                     {
-                        Application.Current.MainPage = new LoginPage();
+                        Application.Current.MainPage = new NavigationPage(new LoginPage());
                     });
                 }
             });

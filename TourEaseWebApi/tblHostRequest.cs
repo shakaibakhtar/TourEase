@@ -17,5 +17,7 @@ namespace TourEaseWebApi
         public int RequestId { get; set; }
         public Nullable<int> HostId { get; set; }
         public Nullable<int> GuestId { get; set; }
+        public string Message { get; set; }
+        public Nullable<bool> IsAccepted { get; set; }
     }
 }

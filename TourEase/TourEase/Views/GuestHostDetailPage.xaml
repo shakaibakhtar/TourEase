@@ -1,0 +1,92 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="TourEase.Views.GuestHostDetailPage"
+             Title="{Binding Title}">
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Send Request" Command="{Binding SendRequestCommand}" Order="Secondary"/>
+        <ToolbarItem Text="Sent Requests" Command="{Binding ShowSentRequestsCommand}" Order="Secondary"/>
+        <ToolbarItem Text="Received Requests" Command="{Binding ShowReceivedRequestsCommand}" Order="Secondary"/>
+    </ContentPage.ToolbarItems>
+    
+    <ContentPage.Content>
+        <ScrollView>
+            <Grid Padding="10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="20"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="130"/>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="30"/>
+                </Grid.RowDefinitions>
+
+                <StackLayout Grid.ColumnSpan="2" Grid.Row="0">
+                    <Image Source="avatar.png" Aspect="AspectFit" HeightRequest="100"/>
+                    <Label Text="{Binding GuestHost.Full_Name}" FontSize="Medium" FontAttributes="Bold" HorizontalOptions="CenterAndExpand"/>
+                </StackLayout>
+
+                <Image Grid.Row="1" Grid.Column="0" Source="email.png" Aspect="AspectFit" VerticalOptions="CenterAndExpand"/>
+                <Label Grid.Row="1" Grid.Column="1" Text="{Binding GuestHost.Email}" VerticalTextAlignment="Center"/>
+
+                <Image Grid.Row="2" Grid.Column="0" Source="phone.png" Aspect="AspectFit" VerticalOptions="CenterAndExpand"/>
+                <Label Grid.Row="2" Grid.Column="1" Text="{Binding GuestHost.Contact_Number}" VerticalTextAlignment="Center"/>
+                
+                <Image Grid.Row="3" Grid.Column="0" Source="gps.png" Aspect="AspectFit" VerticalOptions="CenterAndExpand"/>
+                <Label Grid.Row="3" Grid.Column="1" VerticalTextAlignment="Center">
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <FormattedString.Spans>
+                                <Span Text="{Binding GuestHost.Location_Area}"/>
+                                <Span Text=" - "/>
+                                <Span Text="{Binding GuestHost.Location_City}"/>
+                            </FormattedString.Spans>
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
+
+                <Image Grid.Row="4" Grid.Column="0" Source="userType.png" Aspect="AspectFit" VerticalOptions="CenterAndExpand"/>
+                <Label Grid.Row="4" Grid.Column="1" VerticalTextAlignment="Center">
+                    <Label.Triggers>
+                        <DataTrigger TargetType="Label" Binding="{Binding GuestHost.User_Type}" Value="1">
+                            <Setter Property="Text" Value="Guest"/>
+                        </DataTrigger>
+                        <DataTrigger TargetType="Label" Binding="{Binding GuestHost.User_Type}" Value="2">
+                            <Setter Property="Text" Value="Host"/>
+                        </DataTrigger>
+                    </Label.Triggers>
+                </Label>
+
+                <Image Grid.Row="5" Grid.Column="0" Source="phone.png" Aspect="AspectFit" VerticalOptions="CenterAndExpand">
+                    <Image.Triggers>
+                        <DataTrigger TargetType="Image" Binding="{Binding GuestHost.Is_Verified}" Value="False">
+                            <Setter Property="Source" Value="warning.png"/>
+                        </DataTrigger>
+                        <DataTrigger TargetType="Image" Binding="{Binding GuestHost.Is_Verified}" Value="True">
+                            <Setter Property="Source" Value="tick.png"/>
+                        </DataTrigger>
+                    </Image.Triggers>
+                </Image>
+                <Label Grid.Row="5" Grid.Column="1" VerticalTextAlignment="Center">
+                    <Label.Triggers>
+                        <DataTrigger TargetType="Label" Binding="{Binding GuestHost.Is_Verified}" Value="False">
+                            <Setter Property="Text" Value="Not Verified"/>
+                        </DataTrigger>
+                        <DataTrigger TargetType="Label" Binding="{Binding GuestHost.Is_Verified}" Value="True">
+                            <Setter Property="Text" Value="Verified"/>
+                        </DataTrigger>
+                    </Label.Triggers>
+                </Label>
+
+                <Image Grid.Row="6" Grid.Column="0" Source="crossRed.png" Aspect="AspectFit" VerticalOptions="CenterAndExpand"/>
+                <Label Grid.Row="6" Grid.Column="1" Text="{Binding GuestHost.Fake_Reported_Count}" VerticalTextAlignment="Center"/>
+            </Grid>
+        </ScrollView>
+    </ContentPage.Content>
+</ContentPage>
