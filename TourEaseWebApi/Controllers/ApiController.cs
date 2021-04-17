@@ -191,6 +191,7 @@ namespace TourEaseWebApi.Controllers
                             RequestId = x.RequestId,
                             ReceiverId = id,
                             SenderId = x.HostId ?? 0,
+                            SenderName = db.tblUsers.Where(y => y.UserId == x.HostId).Select(y => y.Full_Name).FirstOrDefault(),
                             RequestMessage = x.Message,
                             IsAccepted = x.IsAccepted
                         }).ToList<clsRequest>();
@@ -202,6 +203,7 @@ namespace TourEaseWebApi.Controllers
                             RequestId = x.GuestRequestId,
                             ReceiverId = id,
                             SenderId = x.GuestId ?? 0,
+                            SenderName = db.tblUsers.Where(y => y.UserId == x.GuestId).Select(y => y.Full_Name).FirstOrDefault(),
                             RequestMessage = x.Message,
                             IsAccepted = x.IsAccepted
                         }).ToList<clsRequest>();
@@ -244,6 +246,7 @@ namespace TourEaseWebApi.Controllers
                         {
                             RequestId = x.GuestRequestId,
                             ReceiverId = x.HostId,
+                            ReceiverName = db.tblUsers.Where(y => y.UserId == x.HostId).Select(y => y.Full_Name).FirstOrDefault(),
                             SenderId = id,
                             RequestMessage = x.Message,
                             IsAccepted = x.IsAccepted
@@ -251,11 +254,12 @@ namespace TourEaseWebApi.Controllers
                     }
                     else
                     {
-                        GuestsHostsRequestsList = db.tblGuestRequests.Where(x => x.HostId == id).Select(x => new clsRequest()
+                        GuestsHostsRequestsList = db.tblHostRequests.Where(x => x.HostId == id).Select(x => new clsRequest()
                         {
-                            RequestId = x.GuestRequestId,
+                            RequestId = x.RequestId,
                             ReceiverId = id,
                             SenderId = x.GuestId ?? 0,
+                            SenderName = db.tblUsers.Where(y => y.UserId == x.GuestId).Select(y => y.Full_Name).FirstOrDefault(),
                             RequestMessage = x.Message,
                             IsAccepted = x.IsAccepted
                         }).ToList<clsRequest>();
@@ -414,8 +418,8 @@ namespace TourEaseWebApi.Controllers
                 {
                     tblHostRequest tmp = new tblHostRequest()
                     {
-                        HostId = userId,
-                        GuestId = hostId,
+                        GuestId = userId,
+                        HostId = hostId,
                         Message = requestMessage
                     };
 
