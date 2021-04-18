@@ -191,7 +191,15 @@ namespace TourEaseWebApi.Controllers
                             RequestId = x.RequestId,
                             ReceiverId = id,
                             SenderId = x.HostId ?? 0,
-                            SenderName = db.tblUsers.Where(y => y.UserId == x.HostId).Select(y => y.Full_Name).FirstOrDefault(),
+                            SenderObject = db.tblUsers.Where(y => y.UserId == x.HostId).Select(y => new clsUser()
+                            {
+                                UserId = y.UserId,
+                                Full_Name = y.Full_Name,
+                                Email = y.Email,
+                                Contact_Number = y.Contact_Number,
+                                Location_Area = y.Location_Area,
+                                Location_City = y.Location_City,
+                            }).FirstOrDefault(),
                             RequestMessage = x.Message,
                             IsAccepted = x.IsAccepted
                         }).ToList<clsRequest>();
@@ -203,7 +211,15 @@ namespace TourEaseWebApi.Controllers
                             RequestId = x.GuestRequestId,
                             ReceiverId = id,
                             SenderId = x.GuestId ?? 0,
-                            SenderName = db.tblUsers.Where(y => y.UserId == x.GuestId).Select(y => y.Full_Name).FirstOrDefault(),
+                            SenderObject = db.tblUsers.Where(y => y.UserId == x.GuestId).Select(y => new clsUser()
+                            {
+                                UserId = y.UserId,
+                                Full_Name = y.Full_Name,
+                                Email = y.Email,
+                                Contact_Number = y.Contact_Number,
+                                Location_Area = y.Location_Area,
+                                Location_City = y.Location_City,
+                            }).FirstOrDefault(),
                             RequestMessage = x.Message,
                             IsAccepted = x.IsAccepted
                         }).ToList<clsRequest>();
@@ -247,6 +263,15 @@ namespace TourEaseWebApi.Controllers
                             RequestId = x.GuestRequestId,
                             ReceiverId = x.HostId,
                             ReceiverName = db.tblUsers.Where(y => y.UserId == x.HostId).Select(y => y.Full_Name).FirstOrDefault(),
+                            ReceiverObject = db.tblUsers.Where(y => y.UserId == x.HostId).Select(y => new clsUser()
+                            {
+                                UserId = y.UserId,
+                                Full_Name = y.Full_Name,
+                                Email = y.Email,
+                                Contact_Number = y.Contact_Number,
+                                Location_Area = y.Location_Area,
+                                Location_City = y.Location_City,
+                            }).FirstOrDefault(),
                             SenderId = id,
                             RequestMessage = x.Message,
                             IsAccepted = x.IsAccepted
@@ -257,9 +282,17 @@ namespace TourEaseWebApi.Controllers
                         GuestsHostsRequestsList = db.tblHostRequests.Where(x => x.HostId == id).Select(x => new clsRequest()
                         {
                             RequestId = x.RequestId,
-                            ReceiverId = id,
-                            SenderId = x.GuestId ?? 0,
-                            SenderName = db.tblUsers.Where(y => y.UserId == x.GuestId).Select(y => y.Full_Name).FirstOrDefault(),
+                            ReceiverId = x.GuestId,
+                            ReceiverObject = db.tblUsers.Where(y => y.UserId == x.GuestId).Select(y => new clsUser()
+                            {
+                                UserId = y.UserId,
+                                Full_Name = y.Full_Name,
+                                Email = y.Email,
+                                Contact_Number = y.Contact_Number,
+                                Location_Area = y.Location_Area,
+                                Location_City = y.Location_City
+                            }).FirstOrDefault(),
+                            SenderId = id,
                             RequestMessage = x.Message,
                             IsAccepted = x.IsAccepted
                         }).ToList<clsRequest>();
@@ -381,7 +414,8 @@ namespace TourEaseWebApi.Controllers
                     {
                         HostId = userId,
                         GuestId = guestId,
-                        Message = requestMessage
+                        Message = requestMessage,
+                        IsAccepted = false
                     };
 
                     db.tblGuestRequests.Add(tmp);
@@ -420,7 +454,8 @@ namespace TourEaseWebApi.Controllers
                     {
                         GuestId = userId,
                         HostId = hostId,
-                        Message = requestMessage
+                        Message = requestMessage,
+                        IsAccepted = false
                     };
 
                     db.tblHostRequests.Add(tmp);

@@ -6,6 +6,8 @@
 
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="Advanced Search" Order="Secondary" Command="{Binding GotoAdvancedSearchCommand}"/>
+        <ToolbarItem Text="Sent Requests" Command="{Binding ShowSentRequestsCommand}" Order="Secondary"/>
+        <ToolbarItem Text="Received Requests" Command="{Binding ShowReceivedRequestsCommand}" Order="Secondary"/>
         <ToolbarItem Text="Logout" Order="Secondary" Command="{Binding LogoutCommand}"/>
     </ContentPage.ToolbarItems>
 

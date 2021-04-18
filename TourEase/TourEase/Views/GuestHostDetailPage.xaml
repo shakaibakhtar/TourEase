@@ -6,8 +6,7 @@
 
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="Send Request" Command="{Binding SendRequestCommand}" Order="Secondary"/>
-        <ToolbarItem Text="Sent Requests" Command="{Binding ShowSentRequestsCommand}" Order="Secondary"/>
-        <ToolbarItem Text="Received Requests" Command="{Binding ShowReceivedRequestsCommand}" Order="Secondary"/>
+        <ToolbarItem Text="Report as Fake" Command="{Binding ReportUserCommand}" Order="Secondary"/>
     </ContentPage.ToolbarItems>
     
     <ContentPage.Content>

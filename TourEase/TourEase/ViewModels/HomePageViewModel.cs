@@ -280,5 +280,27 @@ namespace TourEase.ViewModels
                 });
             }
         }
+
+        public Command ShowSentRequestsCommand
+        {
+            get
+            {
+                return new Command(() =>
+                {
+                    navigation.PushAsync(new RequestsListPage("sent"));
+                });
+            }
+        }
+
+        public Command ShowReceivedRequestsCommand
+        {
+            get
+            {
+                return new Command(() =>
+                {
+                    navigation.PushAsync(new RequestsListPage("received"));
+                });
+            }
+        }
     }
 }

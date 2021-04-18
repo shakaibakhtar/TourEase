@@ -91,7 +91,8 @@ namespace TourEase.ViewModels
                     {
                         if (await api.RegisterUser(User))
                         {
-                            Application.Current.MainPage = new NavigationPage(new HomePage());
+                            Application.Current.MainPage = new CodeVerificationPage(this);
+                            //Application.Current.MainPage = new NavigationPage(new HomePage());
                             //await Application.Current.MainPage.DisplayAlert("Success", "Paa g Registration Success", "OK");
                         }
 

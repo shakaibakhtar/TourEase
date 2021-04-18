@@ -4,48 +4,112 @@
              x:Class="TourEase.Views.RequestsListPage"
              Title="{Binding Title}">
     <ContentPage.Content>
-        <RefreshView IsRefreshing="{Binding IsRefreshing}" Command="{Binding RefreshGuestsHostsListCommand}">
-            <CollectionView x:Name="RequestsList" ItemsSource="{Binding RequestsList}" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
-                <CollectionView.ItemsLayout>
-                    <GridItemsLayout Orientation="Vertical" VerticalItemSpacing="10" />
-                </CollectionView.ItemsLayout>
+        <RefreshView IsRefreshing="{Binding IsRefreshing}" Command="{Binding RefreshRequestsList}">
+            <StackLayout>
+                <Label Text="No Records Found" FontSize="Large" HorizontalOptions="CenterAndExpand" IsVisible="False">
+                    <Label.Triggers>
+                        <DataTrigger TargetType="Label" Binding="{Binding RequestsList.Count}" Value="0">
+                            <Setter Property="IsVisible" Value="True"/>
+                        </DataTrigger>
+                    </Label.Triggers>
+                </Label>
+                
+                <CollectionView x:Name="SentRequestsList" ItemsSource="{Binding RequestsList}" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" IsVisible="False">
+                    <CollectionView.ItemsLayout>
+                        <GridItemsLayout Orientation="Vertical" VerticalItemSpacing="10" />
+                    </CollectionView.ItemsLayout>
 
-                <CollectionView.ItemTemplate>
-                    <DataTemplate>
-                        <StackLayout Orientation="Horizontal" Padding="10" Spacing="20">
-                            <Frame WidthRequest="40" HeightRequest="40" CornerRadius="10" Padding="0" VerticalOptions="CenterAndExpand" HorizontalOptions="Start">
-                                <Image Source="avatar.png" Aspect="AspectFit" VerticalOptions="CenterAndExpand"/>
-                            </Frame>
-                            <StackLayout Orientation="Vertical">
-                                <Label Text="{Binding Full_Name}" HorizontalOptions="StartAndExpand"/>
-                                <Label HorizontalOptions="StartAndExpand">
-                                    <Label.FormattedText>
-                                        <FormattedString>
-                                            <FormattedString.Spans>
-                                                <Span Text="{Binding Location_City}"/>
-                                                <Span Text=" - "/>
-                                                <Span Text="{Binding Location_Area}"/>
-                                            </FormattedString.Spans>
-                                        </FormattedString>
-                                    </Label.FormattedText>
-                                </Label>
-                            </StackLayout>
-                            <!--<StackLayout Orientation="Vertical">-->
-                            <!--<Label Text="{Binding Location_Area}" HorizontalOptions="StartAndExpand"/>-->
-                            <!--<Label Text="{Binding Contact_Number}" HorizontalOptions="StartAndExpand"/>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <StackLayout Orientation="Horizontal" Padding="10" Spacing="20">
+                                <Frame WidthRequest="40" HeightRequest="40" CornerRadius="10" Padding="0" VerticalOptions="CenterAndExpand" HorizontalOptions="Start">
+                                    <Image Source="avatar.png" Aspect="AspectFit" VerticalOptions="CenterAndExpand"/>
+                                </Frame>
+                                <StackLayout Orientation="Vertical">
+                                    <Label Text="{Binding SenderObject.Full_Name}" HorizontalOptions="StartAndExpand"/>
+                                    <Label HorizontalOptions="StartAndExpand">
+                                        <Label.FormattedText>
+                                            <FormattedString>
+                                                <FormattedString.Spans>
+                                                    <Span Text="{Binding SenderObject.Location_City}"/>
+                                                    <Span Text=" - "/>
+                                                    <Span Text="{Binding SenderObject.Location_Area}"/>
+                                                </FormattedString.Spans>
+                                            </FormattedString>
+                                        </Label.FormattedText>
+                                    </Label>
+                                </StackLayout>
+                                <!--<StackLayout Orientation="Vertical">-->
+                                <!--<Label Text="{Binding Location_Area}" HorizontalOptions="StartAndExpand"/>-->
+                                <!--<Label Text="{Binding Contact_Number}" HorizontalOptions="StartAndExpand"/>
                             <Label Text="{Binding Email}" HorizontalOptions="StartAndExpand"/>-->
-                            <!--<Label Text="{Binding Fake_Reported_Count}" HorizontalOptions="StartAndExpand"/>-->
-                            <!--</StackLayout>-->
+                                <!--<Label Text="{Binding Fake_Reported_Count}" HorizontalOptions="StartAndExpand"/>-->
+                                <!--</StackLayout>-->
 
-                            <!--<Button Text="asd" Command="{Binding BindingContext.DeleteEducationCommand, Source={x:Reference GuestsHostsList}}" CommandParameter="{Binding .}" HorizontalOptions="EndAndExpand"/>-->
+                                <!--<Button Text="asd" Command="{Binding BindingContext.DeleteEducationCommand, Source={x:Reference GuestsHostsList}}" CommandParameter="{Binding .}" HorizontalOptions="EndAndExpand"/>-->
 
-                            <StackLayout.GestureRecognizers>
-                                <TapGestureRecognizer NumberOfTapsRequired="1" Command="{Binding BindingContext.OpenGuestHostDetailCommand, Source={x:Reference GuestsHostsList}}" CommandParameter="{Binding .}"/>
-                            </StackLayout.GestureRecognizers>
-                        </StackLayout>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
+                                <StackLayout.GestureRecognizers>
+                                    <TapGestureRecognizer NumberOfTapsRequired="1" Command="{Binding BindingContext.OpenGuestHostDetailCommand, Source={x:Reference SentRequestsList}}" CommandParameter="{Binding .}"/>
+                                </StackLayout.GestureRecognizers>
+                            </StackLayout>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+
+                    <CollectionView.Triggers>
+                        <DataTrigger TargetType="CollectionView" Binding="{Binding option}" Value="sent">
+                            <Setter Property="IsVisible" Value="True"/>
+                        </DataTrigger>
+                    </CollectionView.Triggers>
+                </CollectionView>
+
+                <CollectionView x:Name="ReceivedRequestsList" ItemsSource="{Binding RequestsList}" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" IsVisible="False">
+                    <CollectionView.ItemsLayout>
+                        <GridItemsLayout Orientation="Vertical" VerticalItemSpacing="10" />
+                    </CollectionView.ItemsLayout>
+
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <StackLayout Orientation="Horizontal" Padding="10" Spacing="20">
+                                <Frame WidthRequest="40" HeightRequest="40" CornerRadius="10" Padding="0" VerticalOptions="CenterAndExpand" HorizontalOptions="Start">
+                                    <Image Source="avatar.png" Aspect="AspectFit" VerticalOptions="CenterAndExpand"/>
+                                </Frame>
+                                <StackLayout Orientation="Vertical">
+                                    <Label Text="{Binding SenderObject.Full_Name}" HorizontalOptions="StartAndExpand"/>
+                                    <Label HorizontalOptions="StartAndExpand">
+                                        <Label.FormattedText>
+                                            <FormattedString>
+                                                <FormattedString.Spans>
+                                                    <Span Text="{Binding SenderObject.Location_City}"/>
+                                                    <Span Text=" - "/>
+                                                    <Span Text="{Binding SenderObject.Location_Area}"/>
+                                                </FormattedString.Spans>
+                                            </FormattedString>
+                                        </Label.FormattedText>
+                                    </Label>
+                                </StackLayout>
+                                <!--<StackLayout Orientation="Vertical">-->
+                                <!--<Label Text="{Binding Location_Area}" HorizontalOptions="StartAndExpand"/>-->
+                                <!--<Label Text="{Binding Contact_Number}" HorizontalOptions="StartAndExpand"/>
+                            <Label Text="{Binding Email}" HorizontalOptions="StartAndExpand"/>-->
+                                <!--<Label Text="{Binding Fake_Reported_Count}" HorizontalOptions="StartAndExpand"/>-->
+                                <!--</StackLayout>-->
+
+                                <!--<Button Text="asd" Command="{Binding BindingContext.DeleteEducationCommand, Source={x:Reference GuestsHostsList}}" CommandParameter="{Binding .}" HorizontalOptions="EndAndExpand"/>-->
+
+                                <StackLayout.GestureRecognizers>
+                                    <TapGestureRecognizer NumberOfTapsRequired="1" Command="{Binding BindingContext.OpenGuestHostDetailCommand, Source={x:Reference ReceivedRequestsList}}" CommandParameter="{Binding .}"/>
+                                </StackLayout.GestureRecognizers>
+                            </StackLayout>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+
+                    <CollectionView.Triggers>
+                        <DataTrigger TargetType="CollectionView" Binding="{Binding option}" Value="received">
+                            <Setter Property="IsVisible" Value="True"/>
+                        </DataTrigger>
+                    </CollectionView.Triggers>
+                </CollectionView>
+            </StackLayout>
         </RefreshView>
     </ContentPage.Content>
 </ContentPage>

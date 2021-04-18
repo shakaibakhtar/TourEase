@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="TourEase.Views.SendRequestPage"
+             Title="Send Request">
+    <ContentPage.Content>
+        <StackLayout Padding="10">
+            <StackLayout VerticalOptions="CenterAndExpand">
+                <Label HorizontalOptions="Start" TextColor="#7F7F7F">
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <FormattedString.Spans>
+                                <Span Text="Full Name:" FontAttributes="Bold" FontSize="Medium"/>
+                                <Span Text="{Binding GuestHost.Full_Name}" FontSize="Medium"/>
+                            </FormattedString.Spans>
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
+                <Label HorizontalOptions="Start" TextColor="#7F7F7F">
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <FormattedString.Spans>
+                                <Span Text="Location:" FontAttributes="Bold" FontSize="Medium"/>
+                                <Span Text="{Binding GuestHost.Location_Area}" FontSize="Medium"/>
+                                <Span Text=" - " FontSize="Medium"/>
+                                <Span Text="{Binding GuestHost.Location_City}" FontSize="Medium"/>
+                            </FormattedString.Spans>
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
+                <Label HorizontalOptions="Start" Text="Message:" FontAttributes="Bold" FontSize="Medium" TextColor="#7F7F7F"/>
+                <Editor Text="{Binding RequestMessage}" HeightRequest="100" HorizontalOptions="FillAndExpand"/>
+
+                <Button HorizontalOptions="FillAndExpand" Text="Send" BackgroundColor="#FA4248" TextColor="White" Command="{Binding SubmitRequestCommand}"/>
+            </StackLayout>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>
