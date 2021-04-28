@@ -16,5 +16,6 @@ namespace TourEaseWebApi.Models
         public clsUser ReceiverObject { get; set; }
         public string RequestMessage { get; set; }
         public bool? IsAccepted { get; set; }
+        public double? RatingValue { get; set; }
     }
 }

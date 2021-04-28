@@ -11,7 +11,7 @@ namespace TourEase.Utility
 {
     public class Constants
     {
-        public static string BaseURL { get; set; } = "http://192.168.8.101:8080";
+        public static string BaseURL { get; set; } = "http://192.168.43.192:8080";
         //public static string BaseURL { get; set; } = "http://tourtestapp.azurewebsites.net";
 
         public static string ApiURL { get; set; } = "/api";

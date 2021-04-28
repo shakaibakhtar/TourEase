@@ -302,5 +302,16 @@ namespace TourEase.ViewModels
                 });
             }
         }
+
+        public Command OpenChatWindowCommand
+        {
+            get
+            {
+                return new Command(() =>
+                {
+                    navigation.PushAsync(new ChatWindowPage());
+                });
+            }
+        }
     }
 }

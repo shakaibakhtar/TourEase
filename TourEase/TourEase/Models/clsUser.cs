@@ -126,10 +126,25 @@ namespace TourEase.Models
             }
         }
 
+        double? _RatingValue;
+        public double? RatingValue
+        {
+            get => _RatingValue;
+            set
+            {
+                if (value != null)
+                {
+                    _RatingValue = value;
+                }
+                OnPropertyChanged();
+            }
+        }
+
         public clsUser()
         {
             Fake_Reported_Count = 0;
             Is_Verified = false;
+            RatingValue = 0;
         }
     }
 }

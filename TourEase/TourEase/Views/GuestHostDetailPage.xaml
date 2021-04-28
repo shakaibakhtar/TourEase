@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:skiarate="clr-namespace:SkiaRate;assembly=SkiaRate.Forms"
              x:Class="TourEase.Views.GuestHostDetailPage"
              Title="{Binding Title}">
 
@@ -22,6 +22,7 @@
                     <RowDefinition Height="30"/>
                     <RowDefinition Height="30"/>
                     <RowDefinition Height="30"/>
+                    <RowDefinition Height="20"/>
                     <RowDefinition Height="30"/>
                     <RowDefinition Height="30"/>
                 </Grid.RowDefinitions>
@@ -62,7 +63,19 @@
                     </Label.Triggers>
                 </Label>
 
-                <Image Grid.Row="5" Grid.Column="0" Source="phone.png" Aspect="AspectFit" VerticalOptions="CenterAndExpand">
+                <skiarate:RatingView Grid.Row="5" Grid.Column="0" IsEnabled="False" WidthRequest="20" HeightRequest="20" Value="1" OutlineOnColor="Black" ColorOn="Gold" Count="1" />
+                <Label Grid.Row="5" Grid.Column="1">
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <FormattedString.Spans>
+                                <Span Text="{Binding GuestHost.RatingValue}"/>
+                                <Span Text=" - Stars"/>
+                            </FormattedString.Spans>
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
+
+                <Image Grid.Row="6" Grid.Column="0" Source="phone.png" Aspect="AspectFit" VerticalOptions="CenterAndExpand">
                     <Image.Triggers>
                         <DataTrigger TargetType="Image" Binding="{Binding GuestHost.Is_Verified}" Value="False">
                             <Setter Property="Source" Value="warning.png"/>
@@ -72,7 +85,7 @@
                         </DataTrigger>
                     </Image.Triggers>
                 </Image>
-                <Label Grid.Row="5" Grid.Column="1" VerticalTextAlignment="Center">
+                <Label Grid.Row="6" Grid.Column="1" VerticalTextAlignment="Center">
                     <Label.Triggers>
                         <DataTrigger TargetType="Label" Binding="{Binding GuestHost.Is_Verified}" Value="False">
                             <Setter Property="Text" Value="Not Verified"/>
@@ -83,8 +96,8 @@
                     </Label.Triggers>
                 </Label>
 
-                <Image Grid.Row="6" Grid.Column="0" Source="crossRed.png" Aspect="AspectFit" VerticalOptions="CenterAndExpand"/>
-                <Label Grid.Row="6" Grid.Column="1" Text="{Binding GuestHost.Fake_Reported_Count}" VerticalTextAlignment="Center"/>
+                <Image Grid.Row="7" Grid.Column="0" Source="crossRed.png" Aspect="AspectFit" VerticalOptions="CenterAndExpand"/>
+                <Label Grid.Row="7" Grid.Column="1" Text="{Binding GuestHost.Fake_Reported_Count}" VerticalTextAlignment="Center"/>
             </Grid>
         </ScrollView>
     </ContentPage.Content>

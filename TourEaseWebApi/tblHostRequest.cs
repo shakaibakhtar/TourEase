@@ -19,5 +19,6 @@ namespace TourEaseWebApi
         public Nullable<int> GuestId { get; set; }
         public string Message { get; set; }
         public Nullable<bool> IsAccepted { get; set; }
+        public Nullable<double> RatingValue { get; set; }
     }
 }

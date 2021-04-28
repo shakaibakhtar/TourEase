@@ -719,17 +719,18 @@ namespace TourEase.Utility
                         var responseContent = await response.Content.ReadAsStringAsync();
                         var apiResponse = JsonConvert.DeserializeObject<clsResponse>(responseContent);
 
+                        IsBusy = false;
                         if (response.IsSuccessStatusCode)
                         {
                             if (apiResponse.status)
                             {
-                                await navigation.PushPopupAsync(new PopupAlert("S", "Your request is sent successfully.", "OK"));
+                                await PopupNavigation.Instance.PushAsync(new PopupAlert("S", "Your request is sent successfully.", "OK"));
                                 //Application.Current.MainPage = new FinishRegistrationTechPage(UserDetail);
                                 //Application.Current.MainPage = new VerifyEmailOnRegistration(this);
                             }
                             else
                             {
-                                await navigation.PushPopupAsync(new PopupAlert("E", apiResponse.message, "OK"));
+                                await PopupNavigation.Instance.PushAsync(new PopupAlert("E", apiResponse.message, "OK"));
                                 //await Application.Current.MainPage.DisplayAlert("Error", apiResponse.message, "OK");
                             }
 
@@ -737,7 +738,7 @@ namespace TourEase.Utility
                         }
                         else
                         {
-                            await navigation.PushPopupAsync(new PopupAlert("E", response.Content.ReadAsStringAsync().Result, "OK"));
+                            await PopupNavigation.Instance.PushAsync(new PopupAlert("E", response.Content.ReadAsStringAsync().Result, "OK"));
                             //await Application.Current.MainPage.DisplayAlert("Error", response.Content.ReadAsStringAsync().Result, "OK");
                         }
                     }
@@ -753,7 +754,7 @@ namespace TourEase.Utility
             }
             catch (Exception e)
             {
-                await navigation.PushPopupAsync(new PopupAlert("E", "Something wrong happened. Please try again.", "OK"));
+                await PopupNavigation.Instance.PushAsync(new PopupAlert("E", "Something wrong happened. Please try again.", "OK"));
                 //await Application.Current.MainPage.DisplayAlert("Error", "Something wrong happened. Try again", "OK");
             }
 
@@ -774,7 +775,7 @@ namespace TourEase.Utility
 
                         var uri = new Uri(string.Format(url, string.Empty));
 
-                        var json = JsonConvert.SerializeObject(new { userId = userId, guestId = hostId, requestMessage = requestMessage });
+                        var json = JsonConvert.SerializeObject(new { userId = userId, hostId = hostId, requestMessage = requestMessage });
                         var content = new StringContent(json, Encoding.UTF8, "application/json");
 
                         HttpResponseMessage response = null;
@@ -783,17 +784,18 @@ namespace TourEase.Utility
                         var responseContent = await response.Content.ReadAsStringAsync();
                         var apiResponse = JsonConvert.DeserializeObject<clsResponse>(responseContent);
 
+                        IsBusy = false;
                         if (response.IsSuccessStatusCode)
                         {
                             if (apiResponse.status)
                             {
-                                await navigation.PushPopupAsync(new PopupAlert("S", "Your request is sent successfully.", "OK"));
+                                await PopupNavigation.Instance.PushAsync(new PopupAlert("S", "Your request is sent successfully.", "OK"));
                                 //Application.Current.MainPage = new FinishRegistrationTechPage(UserDetail);
                                 //Application.Current.MainPage = new VerifyEmailOnRegistration(this);
                             }
                             else
                             {
-                                await navigation.PushPopupAsync(new PopupAlert("E", apiResponse.message, "OK"));
+                                await PopupNavigation.Instance.PushAsync(new PopupAlert("E", apiResponse.message, "OK"));
                                 //await Application.Current.MainPage.DisplayAlert("Error", apiResponse.message, "OK");
                             }
 
@@ -801,7 +803,7 @@ namespace TourEase.Utility
                         }
                         else
                         {
-                            await navigation.PushPopupAsync(new PopupAlert("E", response.Content.ReadAsStringAsync().Result, "OK"));
+                            await PopupNavigation.Instance.PushAsync(new PopupAlert("E", response.Content.ReadAsStringAsync().Result, "OK"));
                             //await Application.Current.MainPage.DisplayAlert("Error", response.Content.ReadAsStringAsync().Result, "OK");
                         }
                     }
@@ -817,7 +819,7 @@ namespace TourEase.Utility
             }
             catch (Exception e)
             {
-                await navigation.PushPopupAsync(new PopupAlert("E", "Something wrong happened. Please try again.", "OK"));
+                await PopupNavigation.Instance.PushAsync(new PopupAlert("E", "Something wrong happened. Please try again.", "OK"));
                 //await Application.Current.MainPage.DisplayAlert("Error", "Something wrong happened. Try again", "OK");
             }
 
@@ -1042,6 +1044,282 @@ namespace TourEase.Utility
             return res;
 
         }
+        #endregion
+
+        #region Accept Request
+        public async Task<bool> AcceptGuestRequest(int requestId)
+        {
+            bool res = false;
+            try
+            {
+                if (await Constants.IsInternetConnected())
+                {
+                    // Connection to internet is available
+                    using (var client = new HttpClient())
+                    {
+                        var url = Constants.CompleteURL + "/AcceptGuestRequest";
+
+                        var uri = new Uri(string.Format(url, string.Empty));
+
+                        //string sessionId = await SecureStorageClass.GetValueAgainstKey(SecureStorageClass.keyUserSessionId);
+
+                        var json = JsonConvert.SerializeObject(new { requestId = requestId });
+                        var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                        HttpResponseMessage response = null;
+
+                        response = await client.PostAsync(uri, content);
+                        var responseContent = await response.Content.ReadAsStringAsync();
+                        var apiResponse = JsonConvert.DeserializeObject<clsResponse>(responseContent);
+
+                        IsBusy = false;
+                        if (response.IsSuccessStatusCode)
+                        {
+                            if (!apiResponse.status)
+                            {
+                                await PopupNavigation.Instance.PushAsync(new PopupAlert("E", apiResponse.message, "OK"));
+                                //await PopupNavigation.Instance.PushAsync(new PopupAlert("S", "Account reported successfully.", "OK"));
+                                //Application.Current.MainPage = new FinishRegistrationTechPage(UserDetail);
+                                //Application.Current.MainPage = new VerifyEmailOnRegistration(this);
+                            }
+                            //else
+                            //{
+                            //    await PopupNavigation.Instance.PushAsync(new PopupAlert("E", apiResponse.message, "OK"));
+                            //    //await Application.Current.MainPage.DisplayAlert("Error", apiResponse.message, "OK");
+                            //}
+
+                            res = apiResponse.status;
+                        }
+                        else
+                        {
+                            await PopupNavigation.Instance.PushAsync(new PopupAlert("E", response.Content.ReadAsStringAsync().Result, "OK"));
+                            //await Application.Current.MainPage.DisplayAlert("Error", response.Content.ReadAsStringAsync().Result, "OK");
+                        }
+                    }
+
+                }
+                //else
+                //{
+                //    PopUpData popUp = new PopUpData("crossRed.png", "", GlobalData.InactiveInternet, "OK");
+                //    await Application.Current.MainPage.Navigation.PushPopupAsync(new PopUpPage(popUp));
+                //    //await Application.Current.MainPage.DisplayAlert("Internet Problem", "Its seems like your internet is not active. Please check your internet.", "OK");
+                //}
+
+            }
+            catch (Exception e)
+            {
+                await PopupNavigation.Instance.PushAsync(new PopupAlert("E", "Something wrong happened. Please try again.", "OK"));
+                //await Application.Current.MainPage.DisplayAlert("Error", "Something wrong happened. Try again", "OK");
+            }
+
+            return res;
+        }
+
+        public async Task<bool> AcceptHostRequest(int requestId)
+        {
+            bool res = false;
+            try
+            {
+                if (await Constants.IsInternetConnected())
+                {
+                    // Connection to internet is available
+                    using (var client = new HttpClient())
+                    {
+                        var url = Constants.CompleteURL + "/AcceptHostRequest";
+
+                        var uri = new Uri(string.Format(url, string.Empty));
+
+                        //string sessionId = await SecureStorageClass.GetValueAgainstKey(SecureStorageClass.keyUserSessionId);
+
+                        var json = JsonConvert.SerializeObject(new { requestId = requestId });
+                        var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                        HttpResponseMessage response = null;
+
+                        response = await client.PostAsync(uri, content);
+                        var responseContent = await response.Content.ReadAsStringAsync();
+                        var apiResponse = JsonConvert.DeserializeObject<clsResponse>(responseContent);
+
+                        IsBusy = false;
+                        if (response.IsSuccessStatusCode)
+                        {
+                            if (!apiResponse.status)
+                            {
+                                await PopupNavigation.Instance.PushAsync(new PopupAlert("E", apiResponse.message, "OK"));
+                                //await PopupNavigation.Instance.PushAsync(new PopupAlert("S", "Account reported successfully.", "OK"));
+                                //Application.Current.MainPage = new FinishRegistrationTechPage(UserDetail);
+                                //Application.Current.MainPage = new VerifyEmailOnRegistration(this);
+                            }
+                            //else
+                            //{
+                            //    await PopupNavigation.Instance.PushAsync(new PopupAlert("E", apiResponse.message, "OK"));
+                            //    //await Application.Current.MainPage.DisplayAlert("Error", apiResponse.message, "OK");
+                            //}
+
+                            res = apiResponse.status;
+                        }
+                        else
+                        {
+                            await PopupNavigation.Instance.PushAsync(new PopupAlert("E", response.Content.ReadAsStringAsync().Result, "OK"));
+                            //await Application.Current.MainPage.DisplayAlert("Error", response.Content.ReadAsStringAsync().Result, "OK");
+                        }
+                    }
+
+                }
+                //else
+                //{
+                //    PopUpData popUp = new PopUpData("crossRed.png", "", GlobalData.InactiveInternet, "OK");
+                //    await Application.Current.MainPage.Navigation.PushPopupAsync(new PopUpPage(popUp));
+                //    //await Application.Current.MainPage.DisplayAlert("Internet Problem", "Its seems like your internet is not active. Please check your internet.", "OK");
+                //}
+
+            }
+            catch (Exception e)
+            {
+                await PopupNavigation.Instance.PushAsync(new PopupAlert("E", "Something wrong happened. Please try again.", "OK"));
+                //await Application.Current.MainPage.DisplayAlert("Error", "Something wrong happened. Try again", "OK");
+            }
+
+            return res;
+        }
+        #endregion
+
+        #region Finish Request And Save Rating
+        public async Task<bool> SaveGuestRequestRating(int requestId, int receiverId, double? rating = 5)
+        {
+            bool res = false;
+            try
+            {
+                if (await Constants.IsInternetConnected())
+                {
+                    // Connection to internet is available
+                    using (var client = new HttpClient())
+                    {
+                        var url = Constants.CompleteURL + "/SaveGuestHostRequestRating";
+
+                        var uri = new Uri(string.Format(url, string.Empty));
+
+                        //string sessionId = await SecureStorageClass.GetValueAgainstKey(SecureStorageClass.keyUserSessionId);
+
+                        var json = JsonConvert.SerializeObject(new { requestId = requestId, receiverId = receiverId, rating = Math.Round(rating ?? 0) });
+                        var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                        HttpResponseMessage response = null;
+
+                        response = await client.PostAsync(uri, content);
+                        var responseContent = await response.Content.ReadAsStringAsync();
+                        var apiResponse = JsonConvert.DeserializeObject<clsResponse>(responseContent);
+
+                        IsBusy = false;
+                        if (response.IsSuccessStatusCode)
+                        {
+                            if (!apiResponse.status)
+                            {
+                                await PopupNavigation.Instance.PushAsync(new PopupAlert("E", apiResponse.message, "OK"));
+                                //await PopupNavigation.Instance.PushAsync(new PopupAlert("S", "Account reported successfully.", "OK"));
+                                //Application.Current.MainPage = new FinishRegistrationTechPage(UserDetail);
+                                //Application.Current.MainPage = new VerifyEmailOnRegistration(this);
+                            }
+                            //else
+                            //{
+                            //    await PopupNavigation.Instance.PushAsync(new PopupAlert("E", apiResponse.message, "OK"));
+                            //    //await Application.Current.MainPage.DisplayAlert("Error", apiResponse.message, "OK");
+                            //}
+
+                            res = apiResponse.status;
+                        }
+                        else
+                        {
+                            await PopupNavigation.Instance.PushAsync(new PopupAlert("E", response.Content.ReadAsStringAsync().Result, "OK"));
+                            //await Application.Current.MainPage.DisplayAlert("Error", response.Content.ReadAsStringAsync().Result, "OK");
+                        }
+                    }
+
+                }
+                //else
+                //{
+                //    PopUpData popUp = new PopUpData("crossRed.png", "", GlobalData.InactiveInternet, "OK");
+                //    await Application.Current.MainPage.Navigation.PushPopupAsync(new PopUpPage(popUp));
+                //    //await Application.Current.MainPage.DisplayAlert("Internet Problem", "Its seems like your internet is not active. Please check your internet.", "OK");
+                //}
+
+            }
+            catch (Exception e)
+            {
+                await PopupNavigation.Instance.PushAsync(new PopupAlert("E", "Something wrong happened. Please try again.", "OK"));
+                //await Application.Current.MainPage.DisplayAlert("Error", "Something wrong happened. Try again", "OK");
+            }
+
+            return res;
+        }
+
+        //public async Task<bool> SaveHostRequestRating(int requestId, double rating)
+        //{
+        //    bool res = false;
+        //    try
+        //    {
+        //        if (await Constants.IsInternetConnected())
+        //        {
+        //            // Connection to internet is available
+        //            using (var client = new HttpClient())
+        //            {
+        //                var url = Constants.CompleteURL + "/SaveHostRequestRating";
+
+        //                var uri = new Uri(string.Format(url, string.Empty));
+
+        //                //string sessionId = await SecureStorageClass.GetValueAgainstKey(SecureStorageClass.keyUserSessionId);
+
+        //                var json = JsonConvert.SerializeObject(new { requestId = requestId, rating = rating });
+        //                var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+        //                HttpResponseMessage response = null;
+
+        //                response = await client.PostAsync(uri, content);
+        //                var responseContent = await response.Content.ReadAsStringAsync();
+        //                var apiResponse = JsonConvert.DeserializeObject<clsResponse>(responseContent);
+
+        //                IsBusy = false;
+        //                if (response.IsSuccessStatusCode)
+        //                {
+        //                    if (!apiResponse.status)
+        //                    {
+        //                        await PopupNavigation.Instance.PushAsync(new PopupAlert("E", apiResponse.message, "OK"));
+        //                        //await PopupNavigation.Instance.PushAsync(new PopupAlert("S", "Account reported successfully.", "OK"));
+        //                        //Application.Current.MainPage = new FinishRegistrationTechPage(UserDetail);
+        //                        //Application.Current.MainPage = new VerifyEmailOnRegistration(this);
+        //                    }
+        //                    //else
+        //                    //{
+        //                    //    await PopupNavigation.Instance.PushAsync(new PopupAlert("E", apiResponse.message, "OK"));
+        //                    //    //await Application.Current.MainPage.DisplayAlert("Error", apiResponse.message, "OK");
+        //                    //}
+
+        //                    res = apiResponse.status;
+        //                }
+        //                else
+        //                {
+        //                    await PopupNavigation.Instance.PushAsync(new PopupAlert("E", response.Content.ReadAsStringAsync().Result, "OK"));
+        //                    //await Application.Current.MainPage.DisplayAlert("Error", response.Content.ReadAsStringAsync().Result, "OK");
+        //                }
+        //            }
+
+        //        }
+        //        //else
+        //        //{
+        //        //    PopUpData popUp = new PopUpData("crossRed.png", "", GlobalData.InactiveInternet, "OK");
+        //        //    await Application.Current.MainPage.Navigation.PushPopupAsync(new PopUpPage(popUp));
+        //        //    //await Application.Current.MainPage.DisplayAlert("Internet Problem", "Its seems like your internet is not active. Please check your internet.", "OK");
+        //        //}
+
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        await PopupNavigation.Instance.PushAsync(new PopupAlert("E", "Something wrong happened. Please try again.", "OK"));
+        //        //await Application.Current.MainPage.DisplayAlert("Error", "Something wrong happened. Try again", "OK");
+        //    }
+
+        //    return res;
+        //}
         #endregion
     }
 }

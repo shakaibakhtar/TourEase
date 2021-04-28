@@ -110,11 +110,11 @@ namespace TourEase.ViewModels
 
                     if (userType == 1) // user is guest
                     {
-                        await api.RequestGuest(userId, GuestHost.UserId, RequestMessage);
+                        await api.RequestHost(userId, GuestHost.UserId, RequestMessage);
                     }
                     else
                     {
-                        await api.RequestHost(userId, GuestHost.UserId, RequestMessage);
+                        await api.RequestGuest(userId, GuestHost.UserId, RequestMessage);
                     }
 
                     Device.BeginInvokeOnMainThread(() =>

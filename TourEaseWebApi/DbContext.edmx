@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="Models.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012.Azure" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+      <Schema Namespace="Models.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012.Azure" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="tblGuestRequests">
           <Key>
             <PropertyRef Name="GuestRequestId" />
@@ -14,6 +14,7 @@
           <Property Name="GuestId" Type="int" />
           <Property Name="Message" Type="nvarchar(max)" />
           <Property Name="IsAccepted" Type="bit" />
+          <Property Name="RatingValue" Type="float" />
         </EntityType>
         <EntityType Name="tblHostRequests">
           <Key>
@@ -24,6 +25,7 @@
           <Property Name="GuestId" Type="int" />
           <Property Name="Message" Type="varchar(max)" />
           <Property Name="IsAccepted" Type="bit" />
+          <Property Name="RatingValue" Type="float" />
         </EntityType>
         <EntityType Name="tblUser">
           <Key>
@@ -81,7 +83,8 @@ warning 6002: The table/view 'TourEaseDb.sys.database_firewall_rules' does not h
     FROM [sys].[database_firewall_rules] AS [database_firewall_rules]</DefiningQuery>
           </EntitySet>
         </EntityContainer>
-      </Schema></edmx:StorageModels>
+      </Schema>
+    </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="Models" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -94,6 +97,7 @@ warning 6002: The table/view 'TourEaseDb.sys.database_firewall_rules' does not h
           <Property Name="GuestId" Type="Int32" />
           <Property Name="Message" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="IsAccepted" Type="Boolean" />
+          <Property Name="RatingValue" Type="Double" />
         </EntityType>
         <EntityType Name="tblHostRequest">
           <Key>
@@ -104,6 +108,7 @@ warning 6002: The table/view 'TourEaseDb.sys.database_firewall_rules' does not h
           <Property Name="GuestId" Type="Int32" />
           <Property Name="Message" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="IsAccepted" Type="Boolean" />
+          <Property Name="RatingValue" Type="Double" />
         </EntityType>
         <EntityType Name="tblUser">
           <Key>
@@ -159,29 +164,30 @@ warning 6002: The table/view 'TourEaseDb.sys.database_firewall_rules' does not h
           <EntitySetMapping Name="tblGuestRequests">
             <EntityTypeMapping TypeName="Models.tblGuestRequest">
               <MappingFragment StoreEntitySet="tblGuestRequests">
-                <ScalarProperty Name="IsAccepted" ColumnName="IsAccepted" />
                 <ScalarProperty Name="GuestRequestId" ColumnName="GuestRequestId" />
                 <ScalarProperty Name="HostId" ColumnName="HostId" />
                 <ScalarProperty Name="GuestId" ColumnName="GuestId" />
                 <ScalarProperty Name="Message" ColumnName="Message" />
+                <ScalarProperty Name="IsAccepted" ColumnName="IsAccepted" />
+                <ScalarProperty Name="RatingValue" ColumnName="RatingValue" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="tblHostRequests">
             <EntityTypeMapping TypeName="Models.tblHostRequest">
               <MappingFragment StoreEntitySet="tblHostRequests">
-                <ScalarProperty Name="IsAccepted" ColumnName="IsAccepted" />
-                <ScalarProperty Name="Message" ColumnName="Message" />
                 <ScalarProperty Name="RequestId" ColumnName="RequestId" />
                 <ScalarProperty Name="HostId" ColumnName="HostId" />
                 <ScalarProperty Name="GuestId" ColumnName="GuestId" />
+                <ScalarProperty Name="Message" ColumnName="Message" />
+                <ScalarProperty Name="IsAccepted" ColumnName="IsAccepted" />
+                <ScalarProperty Name="RatingValue" ColumnName="RatingValue" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="tblUsers">
             <EntityTypeMapping TypeName="Models.tblUser">
               <MappingFragment StoreEntitySet="tblUser">
-                <ScalarProperty Name="Is_Verified" ColumnName="Is_Verified" />
                 <ScalarProperty Name="UserId" ColumnName="UserId" />
                 <ScalarProperty Name="Full_Name" ColumnName="Full_Name" />
                 <ScalarProperty Name="Email" ColumnName="Email" />
@@ -191,6 +197,7 @@ warning 6002: The table/view 'TourEaseDb.sys.database_firewall_rules' does not h
                 <ScalarProperty Name="Location_Area" ColumnName="Location_Area" />
                 <ScalarProperty Name="User_Type" ColumnName="User_Type" />
                 <ScalarProperty Name="Fake_Reported_Count" ColumnName="Fake_Reported_Count" />
+                <ScalarProperty Name="Is_Verified" ColumnName="Is_Verified" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TourEase.Android", "TourEas
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TourEase.iOS", "TourEase\TourEase.iOS\TourEase.iOS.csproj", "{4800F3F4-BB84-4BB9-9E6C-E9AAFC8DC833}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TourEase", "TourEase\TourEase\TourEase.csproj", "{ABF5EA29-F067-4955-8736-B4C17546E357}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TourEase", "TourEase\TourEase\TourEase.csproj", "{ABF5EA29-F067-4955-8736-B4C17546E357}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TourEaseWebApi", "TourEaseWebApi\TourEaseWebApi.csproj", "{81A01F34-26D7-4064-9731-DDBB4137CA35}"
 EndProject

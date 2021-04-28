@@ -35,6 +35,14 @@ namespace TourEase.ViewModels
                         });
 
                     }
+                    else
+                    {
+                        SecureStorageClass.ClearAll();
+                        Device.BeginInvokeOnMainThread(() =>
+                        {
+                            Application.Current.MainPage = new NavigationPage(new LoginPage());
+                        });
+                    }
                 }
                 else
                 {

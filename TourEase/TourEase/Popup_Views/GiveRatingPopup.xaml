@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<pages:PopupPage xmlns="http://xamarin.com/schemas/2014/forms"
+                 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                 xmlns:pages="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"
+                 xmlns:skiarate="clr-namespace:SkiaRate;assembly=SkiaRate.Forms"
+                 x:Class="TourEase.Popup_Views.GiveRatingPopup">
+    <!--You can use any elements here which are extended from Xamarin.Forms.View-->
+    <StackLayout 
+        VerticalOptions="CenterAndExpand" 
+        HorizontalOptions="CenterAndExpand"
+        BackgroundColor="White"
+        Margin="30"
+        Padding="10, 20, 10, 10">
+
+        <skiarate:RatingView IsEnabled="True" WidthRequest="150" HeightRequest="20" Value="{Binding Request.RatingValue,Mode=TwoWay}" OutlineOnColor="Black" ColorOn="Gold" Count="5" />
+
+        <Button Command="{Binding SaveRatingCommand}" Padding="0" FontAttributes="Bold" FontSize="Large" BackgroundColor="Transparent" Text="Save"/>
+
+    </StackLayout>
+</pages:PopupPage>

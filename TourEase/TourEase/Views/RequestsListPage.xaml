@@ -26,14 +26,14 @@
                                     <Image Source="avatar.png" Aspect="AspectFit" VerticalOptions="CenterAndExpand"/>
                                 </Frame>
                                 <StackLayout Orientation="Vertical">
-                                    <Label Text="{Binding SenderObject.Full_Name}" HorizontalOptions="StartAndExpand"/>
+                                    <Label Text="{Binding ReceiverObject.Full_Name}" HorizontalOptions="StartAndExpand"/>
                                     <Label HorizontalOptions="StartAndExpand">
                                         <Label.FormattedText>
                                             <FormattedString>
                                                 <FormattedString.Spans>
-                                                    <Span Text="{Binding SenderObject.Location_City}"/>
+                                                    <Span Text="{Binding ReceiverObject.Location_City}"/>
                                                     <Span Text=" - "/>
-                                                    <Span Text="{Binding SenderObject.Location_Area}"/>
+                                                    <Span Text="{Binding ReceiverObject.Location_Area}"/>
                                                 </FormattedString.Spans>
                                             </FormattedString>
                                         </Label.FormattedText>

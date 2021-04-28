@@ -92,10 +92,36 @@ namespace TourEase.Models
             }
         }
 
+        bool _IsAccepted;
+        public bool IsAccepted
+        {
+            get => _IsAccepted;
+            set
+            {
+                _IsAccepted = value;
+                OnPropertyChanged();
+            }
+        }
+
+        double? _RatingValue;
+        public double? RatingValue
+        {
+            get => _RatingValue;
+            set
+            {
+                if (value != null)
+                {
+                    _RatingValue = value;
+                }
+                OnPropertyChanged();
+            }
+        }
+
         public clsRequest()
         {
             SenderObject = new clsUser();
             ReceiverObject = new clsUser();
+            RatingValue = 0;
         }
     }
 }

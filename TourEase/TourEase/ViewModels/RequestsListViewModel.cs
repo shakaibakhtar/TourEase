@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TourEase.Models;
 using TourEase.Utility;
+using TourEase.Views;
 using Xamarin.Forms;
 
 namespace TourEase.ViewModels
@@ -126,6 +127,14 @@ namespace TourEase.ViewModels
                 return new Command<clsRequest>((clsRequest param) =>
                 {
                     clsRequest req = param;
+                    if (option.Equals("sent"))
+                    {
+                        navigation.PushAsync(new RequestDetailPage(req, option));
+                    }
+                    else
+                    {
+                        navigation.PushAsync(new RequestDetailPage(req, option));
+                    }
                 });
             }
         }
