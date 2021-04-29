@@ -126,6 +126,18 @@ namespace TourEase.Models
             }
         }
 
+        bool? _Is_Enabled;
+        public bool? Is_Enabled
+        {
+            get => _Is_Enabled;
+            set
+            {
+                if (value != null)
+                    _Is_Enabled = value;
+                OnPropertyChanged();
+            }
+        }
+
         double? _RatingValue;
         public double? RatingValue
         {
@@ -144,6 +156,7 @@ namespace TourEase.Models
         {
             Fake_Reported_Count = 0;
             Is_Verified = false;
+            Is_Enabled = false;
             RatingValue = 0;
         }
     }

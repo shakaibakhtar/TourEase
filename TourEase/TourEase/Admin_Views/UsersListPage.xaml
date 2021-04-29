@@ -1,20 +1,15 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="TourEase.Views.HomePage"
-             Title="{Binding HomeTitle}">
+             x:Class="TourEase.Admin_Views.UsersListPage"
+             Title="Users List">
 
     <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Advanced Search" Order="Secondary" Command="{Binding GotoAdvancedSearchCommand}"/>
-        <ToolbarItem Text="{Binding CompanionEventTitle}" Command="{Binding CompanionEventRequestsCommand}" Order="Secondary"/>
-        <ToolbarItem Text="Sent Requests" Command="{Binding ShowSentRequestsCommand}" Order="Secondary"/>
-        <ToolbarItem Text="Received Requests" Command="{Binding ShowReceivedRequestsCommand}" Order="Secondary"/>
-        <ToolbarItem Text="Chat" Command="{Binding OpenChatWindowCommand}" Order="Secondary"/>
-        <ToolbarItem Text="Logout" Order="Secondary" Command="{Binding LogoutCommand}"/>
+        <ToolbarItem Text="Logout" Command="{Binding LogoutCommand}" Order="Primary"/>
     </ContentPage.ToolbarItems>
-
+    
     <ContentPage.Content>
-        <RefreshView IsRefreshing="{Binding IsRefreshing}" Command="{Binding RefreshGuestsHostsListCommand}">
+        <RefreshView IsRefreshing="{Binding IsRefreshing}" Command="{Binding RefreshUsersListCommand}">
             <StackLayout>
                 <Label Text="No Records Found" FontSize="Large" HorizontalOptions="CenterAndExpand" IsVisible="False">
                     <Label.Triggers>
@@ -24,7 +19,7 @@
                     </Label.Triggers>
                 </Label>
 
-                <CollectionView x:Name="GuestsHostsList" ItemsSource="{Binding SearchableList}" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+                <CollectionView x:Name="UsersList" ItemsSource="{Binding SearchableList}" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
                     <CollectionView.ItemsLayout>
                         <GridItemsLayout Orientation="Vertical" VerticalItemSpacing="10" />
                     </CollectionView.ItemsLayout>
@@ -56,10 +51,10 @@
                                 <!--<Label Text="{Binding Fake_Reported_Count}" HorizontalOptions="StartAndExpand"/>-->
                                 <!--</StackLayout>-->
 
-                                <!--<Button Text="asd" Command="{Binding BindingContext.DeleteEducationCommand, Source={x:Reference GuestsHostsList}}" CommandParameter="{Binding .}" HorizontalOptions="EndAndExpand"/>-->
+                                <!--<Button Text="asd" Command="{Binding BindingContext.DeleteEducationCommand, Source={x:Reference UsersList}}" CommandParameter="{Binding .}" HorizontalOptions="EndAndExpand"/>-->
 
                                 <StackLayout.GestureRecognizers>
-                                    <TapGestureRecognizer NumberOfTapsRequired="1" Command="{Binding BindingContext.OpenGuestHostDetailCommand, Source={x:Reference GuestsHostsList}}" CommandParameter="{Binding .}"/>
+                                    <TapGestureRecognizer NumberOfTapsRequired="1" Command="{Binding BindingContext.OpenUserDetailCommand, Source={x:Reference UsersList}}" CommandParameter="{Binding .}"/>
                                 </StackLayout.GestureRecognizers>
                             </StackLayout>
                         </DataTemplate>

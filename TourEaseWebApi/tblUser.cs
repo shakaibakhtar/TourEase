@@ -24,5 +24,6 @@ namespace TourEaseWebApi
         public Nullable<int> User_Type { get; set; }
         public Nullable<int> Fake_Reported_Count { get; set; }
         public Nullable<bool> Is_Verified { get; set; }
+        public Nullable<bool> Is_Enabled { get; set; }
     }
 }

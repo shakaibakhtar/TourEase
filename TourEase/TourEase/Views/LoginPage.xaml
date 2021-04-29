@@ -26,6 +26,11 @@
                             <TapGestureRecognizer NumberOfTapsRequired="1" Command="{Binding GotoForgotPasswordCommand}"/>
                         </Label.GestureRecognizers>
                     </Label>
+                    <Label Text="Login As ?" />
+                    <StackLayout Orientation="Horizontal">
+                        <RadioButton Content="User" />
+                        <RadioButton Content="Admin" IsChecked="{Binding IsAdmin, Mode=TwoWay}"/>
+                    </StackLayout>
                     <Button HorizontalOptions="FillAndExpand" Text="Sign In" BackgroundColor="#FA4248" TextColor="White" Command="{Binding LoginCommand}"/>
                 </StackLayout>
                 <StackLayout Orientation="Horizontal" VerticalOptions="EndAndExpand" HorizontalOptions="CenterAndExpand" Padding="0, 0, 0, 20">

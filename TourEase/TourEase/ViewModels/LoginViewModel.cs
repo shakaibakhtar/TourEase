@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using TourEase.Admin_Views;
 using TourEase.Models;
 using TourEase.Popup_Views;
 using TourEase.Utility;
@@ -28,11 +29,23 @@ namespace TourEase.ViewModels
                 OnPropertyChanged();
             }
         }
+
+        bool _IsAdmin;
+        public bool IsAdmin
+        {
+            get => _IsAdmin;
+            set
+            {
+                _IsAdmin = value;
+                OnPropertyChanged();
+            }
+        }
         public INavigation navigation { get; set; }
         public LoginViewModel(INavigation navigation)
         {
             this.navigation = navigation;
             User = new clsUser();
+            IsAdmin = true;
         }
 
         private async Task<bool> ValidateInputs()
@@ -52,25 +65,40 @@ namespace TourEase.ViewModels
                     if (await ValidateInputs())
                     {
                         api.IsBusy = true;
-                        await Login();
+                        await Login(IsAdmin, api);
                         api.IsBusy = false;
                     }
                 });
             }
         }
 
-        public async Task<bool> Login(ApiCalls tmp = null)
+        public async Task<bool> Login(bool isAdmin = false, ApiCalls tmp = null)
         {
             bool res = false;
             ApiCalls api = tmp ?? new ApiCalls(navigation);
 
-            if (await api.LoginUser(User, this))
+
+            if (isAdmin)
             {
-                res = true;
-                Device.BeginInvokeOnMainThread(() =>
+                if (await api.LoginAdmin(User, this))
                 {
-                    Application.Current.MainPage = new NavigationPage(new HomePage());
-                });
+                    res = true;
+                    Device.BeginInvokeOnMainThread(() =>
+                    {
+                        Application.Current.MainPage = new NavigationPage(new UsersListPage());
+                    });
+                }
+            }
+            else
+            {
+                if (await api.LoginUser(User, this))
+                {
+                    res = true;
+                    Device.BeginInvokeOnMainThread(() =>
+                    {
+                        Application.Current.MainPage = new NavigationPage(new HomePage());
+                    });
+                }
             }
 
             return res;

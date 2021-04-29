@@ -18,6 +18,7 @@ namespace TourEaseWebApi.Models
         public string UserTypeName { get; set; }
         public int? Fake_Reported_Count { get; set; }
         public bool? Is_Verified { get; set; }
+        public bool? Is_Enabled { get; set; }
         public double? RatingValue { get; set; }
     }
 }

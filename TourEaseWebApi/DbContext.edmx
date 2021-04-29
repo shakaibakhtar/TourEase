@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="Models.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012.Azure" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="Models.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012.Azure" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="tblGuestRequests">
           <Key>
             <PropertyRef Name="GuestRequestId" />
@@ -41,6 +41,7 @@
           <Property Name="User_Type" Type="int" />
           <Property Name="Fake_Reported_Count" Type="int" />
           <Property Name="Is_Verified" Type="bit" />
+          <Property Name="Is_Enabled" Type="bit" />
         </EntityType>
         <EntityType Name="tblUserType">
           <Key>
@@ -83,8 +84,7 @@ warning 6002: The table/view 'TourEaseDb.sys.database_firewall_rules' does not h
     FROM [sys].[database_firewall_rules] AS [database_firewall_rules]</DefiningQuery>
           </EntitySet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="Models" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -124,6 +124,7 @@ warning 6002: The table/view 'TourEaseDb.sys.database_firewall_rules' does not h
           <Property Name="User_Type" Type="Int32" />
           <Property Name="Fake_Reported_Count" Type="Int32" />
           <Property Name="Is_Verified" Type="Boolean" />
+          <Property Name="Is_Enabled" Type="Boolean" />
         </EntityType>
         <EntityType Name="tblUserType">
           <Key>
@@ -188,6 +189,7 @@ warning 6002: The table/view 'TourEaseDb.sys.database_firewall_rules' does not h
           <EntitySetMapping Name="tblUsers">
             <EntityTypeMapping TypeName="Models.tblUser">
               <MappingFragment StoreEntitySet="tblUser">
+                <ScalarProperty Name="Is_Enabled" ColumnName="Is_Enabled" />
                 <ScalarProperty Name="UserId" ColumnName="UserId" />
                 <ScalarProperty Name="Full_Name" ColumnName="Full_Name" />
                 <ScalarProperty Name="Email" ColumnName="Email" />

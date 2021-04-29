@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using TourEase.Admin_Views;
 using TourEase.Models;
 using TourEase.Utility;
 using TourEase.Views;
@@ -22,18 +23,28 @@ namespace TourEase.ViewModels
                 loginVM.User = new clsUser();
                 loginVM.User.Email = await SecureStorageClass.GetValueAgainstKey(SecureStorageClass.keyUserEmail);
                 loginVM.User.Password = await SecureStorageClass.GetValueAgainstKey(SecureStorageClass.keyUserPassword);
+                bool IsAdmin = Convert.ToBoolean(await SecureStorageClass.GetValueAgainstKey(SecureStorageClass.keyIsAdmin));
 
                 ApiCalls api = new ApiCalls(navigation);
 
                 if ((!string.IsNullOrEmpty(loginVM.User.Email)) && (!string.IsNullOrWhiteSpace(loginVM.User.Email)))
                 {
-                    if (await loginVM.Login())
+                    if (await loginVM.Login(IsAdmin))
                     {
-                        Device.BeginInvokeOnMainThread(() =>
+                        if (IsAdmin)
                         {
-                            Application.Current.MainPage = new NavigationPage(new HomePage());
-                        });
-
+                            Device.BeginInvokeOnMainThread(() =>
+                            {
+                                Application.Current.MainPage = new NavigationPage(new UsersListPage());
+                            });
+                        }
+                        else
+                        {
+                            Device.BeginInvokeOnMainThread(() =>
+                            {
+                                Application.Current.MainPage = new NavigationPage(new HomePage());
+                            });
+                        }
                     }
                     else
                     {

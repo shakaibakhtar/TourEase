@@ -37,7 +37,8 @@ namespace TourEaseWebApi.Controllers
                         Location_Area = user.Location_Area,
                         Fake_Reported_Count = user.Fake_Reported_Count,
                         User_Type = user.User_Type,
-                        Is_Verified = false
+                        Is_Verified = false,
+                        Is_Enabled = false,
                     };
 
                     db.tblUsers.Add(tmp);
@@ -76,6 +77,61 @@ namespace TourEaseWebApi.Controllers
 
         [ValidateInput(false)]
         [HttpPost]
+        public ActionResult LoginAsAdmin(clsUser user)
+        {
+            bool status = false;
+            string message = "";
+
+            if (user != null)
+            {
+                try
+                {
+                    var tmp = db.tblUsers.Where(x => x.Email == user.Email && x.Password == user.Password && x.User_Type == 3).Select(x => new clsUser()
+                    {
+                        Email = x.Email,
+                        Full_Name = x.Full_Name,
+                        Contact_Number = x.Contact_Number,
+                        Location_City = x.Location_City,
+                        Location_Area = x.Location_Area,
+                        UserId = x.UserId,
+                        Fake_Reported_Count = x.Fake_Reported_Count,
+                        User_Type = x.User_Type,
+                        //UserTypeName = db.tblUserTypes.Where(y => y.UserTypeId == x.User_Type).Select(y => y.UserTypeName).FirstOrDefault(),
+                        Is_Verified = true,
+                        Is_Enabled = true,
+                    }).FirstOrDefault();
+                    if (tmp != null)
+                    {
+                        status = true;
+                        message = "You have login successfully.";
+                        user = tmp;
+                    }
+                    else
+                    {
+                        status = false;
+                        message = "Invalid username or password.";
+                        user = null;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    status = false;
+                    message = ex.Message;
+                    user = null;
+                }
+            }
+            else
+            {
+                status = false;
+                message = "Invalid user sent to api";
+                user = null;
+            }
+
+            return Json(new { status = status, message = message, user = user }, JsonRequestBehavior.AllowGet);
+        }
+
+        [ValidateInput(false)]
+        [HttpPost]
         public ActionResult Login(clsUser user)
         {
             bool status = false;
@@ -96,7 +152,8 @@ namespace TourEaseWebApi.Controllers
                         Fake_Reported_Count = x.Fake_Reported_Count,
                         User_Type = x.User_Type,
                         //UserTypeName = db.tblUserTypes.Where(y => y.UserTypeId == x.User_Type).Select(y => y.UserTypeName).FirstOrDefault(),
-                        Is_Verified = x.Is_Verified
+                        Is_Verified = x.Is_Verified,
+                        Is_Enabled = x.Is_Enabled,
                     }).FirstOrDefault();
                     if (tmp != null)
                     {
@@ -140,7 +197,7 @@ namespace TourEaseWebApi.Controllers
             {
                 try
                 {
-                    GuestsHostsList = db.tblUsers.Where(x => x.UserId != id && x.User_Type != userTypeId).Select(x => new clsUser()
+                    GuestsHostsList = db.tblUsers.Where(x => x.UserId != id && x.User_Type != userTypeId && x.User_Type != 3).Select(x => new clsUser()
                     {
                         UserId = x.UserId,
                         Email = x.Email,
@@ -345,6 +402,7 @@ namespace TourEaseWebApi.Controllers
                     if (tmp != null)
                     {
                         tmp.Is_Verified = true;
+                        tmp.Is_Enabled = true;
                         db.SaveChanges();
 
                         status = true;
@@ -430,7 +488,8 @@ namespace TourEaseWebApi.Controllers
                             HostId = userId,
                             GuestId = guestId,
                             Message = requestMessage,
-                            IsAccepted = false
+                            IsAccepted = false,
+                            RatingValue = 0
                         };
 
                         db.tblGuestRequests.Add(tmp);
@@ -478,7 +537,8 @@ namespace TourEaseWebApi.Controllers
                             GuestId = userId,
                             HostId = hostId,
                             Message = requestMessage,
-                            IsAccepted = false
+                            IsAccepted = false,
+                            RatingValue = 0
                         };
 
                         db.tblHostRequests.Add(tmp);
@@ -793,46 +853,222 @@ namespace TourEaseWebApi.Controllers
             return Json(new { status = status, message = message }, JsonRequestBehavior.AllowGet);
         }
 
-        //[ValidateInput(false)]
-        //[HttpPost]
-        //public ActionResult SaveHostRequestRating(int requestId = 0, decimal rating = 0)
-        //{
-        //    bool status = false;
-        //    string message = "";
+        [ValidateInput(false)]
+        [HttpGet]
+        public ActionResult GetAllUsers() // userType = 1 for Guests, and 2 for Hosts
+        {
+            bool status = false;
+            string message = "";
+            List<clsUser> UsersList = new List<clsUser>();
 
-        //    if (requestId != 0)
-        //    {
-        //        try
-        //        {
-        //            var tmp = db.tblGuestRequests.Where(x => x.GuestRequestId == requestId).FirstOrDefault();
-        //            if (tmp != null)
-        //            {
-        //                tmp.RatingValue = rating;
-        //                db.SaveChanges();
 
-        //                status = true;
-        //                message = "Rating has been saved successfully.";
-        //            }
-        //            else
-        //            {
-        //                status = false;
-        //                message = "System ran into a problem, please try again later.";
-        //            }
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            status = false;
-        //            message = ex.Message;
-        //        }
-        //    }
-        //    else
-        //    {
-        //        status = false;
-        //        message = "Invalid user id sent to api";
-        //    }
+            try
+            {
+                UsersList = db.tblUsers.Where(x => x.User_Type != 3).Select(x => new clsUser()
+                {
+                    UserId = x.UserId,
+                    Email = x.Email,
+                    Contact_Number = x.Contact_Number,
+                    Location_City = x.Location_City,
+                    Location_Area = x.Location_Area,
+                    Full_Name = x.Full_Name,
+                    Fake_Reported_Count = x.Fake_Reported_Count,
+                    User_Type = x.User_Type,
+                    Is_Verified = x.Is_Verified,
+                    Is_Enabled = x.Is_Enabled,
+                    RatingValue = x.User_Type == 1 ? db.tblGuestRequests.Where(y => y.RatingValue != 0).Select(y => y.RatingValue).Average() : db.tblHostRequests.Where(y => y.RatingValue != 0).Select(y => y.RatingValue).Average()
+                }).ToList<clsUser>();
 
-        //    return Json(new { status = status, message = message }, JsonRequestBehavior.AllowGet);
-        //}
+                status = true;
+                message = "";
+            }
+            catch (Exception ex)
+            {
+                status = false;
+                message = ex.Message;
+                UsersList = null;
+            }
+
+            return Json(new { status = status, message = message, usersList = UsersList }, JsonRequestBehavior.AllowGet);
+        }
+
+        [ValidateInput(false)]
+        [HttpPost]
+        public ActionResult DisableUser(int id)
+        {
+            bool status = false;
+            string message = "";
+
+            if (id != 0)
+            {
+                try
+                {
+                    var tmp = db.tblUsers.Where(x => x.UserId == id).FirstOrDefault();
+                    if (tmp != null)
+                    {
+                        tmp.Is_Enabled = false;
+                        db.SaveChanges();
+
+                        status = true;
+                        message = "Account disabled successfully.";
+                    }
+                    else
+                    {
+                        status = false;
+                        message = "System ran into a problem, please try again later.";
+                    }
+                }
+                catch (Exception ex)
+                {
+                    status = false;
+                    message = ex.Message;
+                }
+            }
+            else
+            {
+                status = false;
+                message = "Invalid user id sent to api";
+            }
+
+            return Json(new { status = status, message = message }, JsonRequestBehavior.AllowGet);
+        }
+
+        [ValidateInput(false)]
+        [HttpPost]
+        public ActionResult EnableUser(int id)
+        {
+            bool status = false;
+            string message = "";
+
+            if (id != 0)
+            {
+                try
+                {
+                    var tmp = db.tblUsers.Where(x => x.UserId == id).FirstOrDefault();
+                    if (tmp != null)
+                    {
+                        tmp.Is_Enabled = true;
+                        db.SaveChanges();
+
+                        status = true;
+                        message = "Account enabled successfully.";
+                    }
+                    else
+                    {
+                        status = false;
+                        message = "System ran into a problem, please try again later.";
+                    }
+                }
+                catch (Exception ex)
+                {
+                    status = false;
+                    message = ex.Message;
+                }
+            }
+            else
+            {
+                status = false;
+                message = "Invalid user id sent to api";
+            }
+
+            return Json(new { status = status, message = message }, JsonRequestBehavior.AllowGet);
+        }
+
+        [ValidateInput(false)]
+        [HttpPost]
+        public ActionResult EventRequest(int senderId, string requestMessage)
+        {
+            bool status = false;
+            string message = "";
+
+            if (senderId != 0)
+            {
+                try
+                {
+                    var guestsList = db.tblUsers.Where(x => x.User_Type == 1).ToList();
+
+                    foreach (var guest in guestsList)
+                    {
+                        tblGuestRequest tmp = new tblGuestRequest()
+                        {
+                            HostId = senderId,
+                            GuestId = guest.UserId,
+                            Message = requestMessage,
+                            IsAccepted = false,
+                            RatingValue = 0
+                        };
+
+                        db.tblGuestRequests.Add(tmp);
+                    }
+                    db.SaveChanges();
+
+                    status = true;
+                    message = "Event request sent successfully.";
+
+
+                }
+                catch (Exception ex)
+                {
+                    status = false;
+                    message = ex.Message;
+                }
+            }
+            else
+            {
+                status = false;
+                message = "Invalid ids sent to api";
+            }
+
+            return Json(new { status = status, message = message }, JsonRequestBehavior.AllowGet);
+        }
+
+        [ValidateInput(false)]
+        [HttpPost]
+        public ActionResult CompanionRequest(int senderId, string requestMessage)
+        {
+            bool status = false;
+            string message = "";
+
+            if (senderId != 0)
+            {
+                try
+                {
+                    var hostsList = db.tblUsers.Where(x => x.User_Type == 2).ToList();
+
+                    foreach (var host in hostsList)
+                    {
+                        tblHostRequest tmp = new tblHostRequest()
+                        {
+                            HostId = host.UserId,
+                            GuestId = senderId,
+                            Message = requestMessage,
+                            IsAccepted = false,
+                            RatingValue = 0
+                        };
+
+                        db.tblHostRequests.Add(tmp);
+                    }
+                    db.SaveChanges();
+
+                    status = true;
+                    message = "Companion request sent successfully.";
+
+
+                }
+                catch (Exception ex)
+                {
+                    status = false;
+                    message = ex.Message;
+                }
+            }
+            else
+            {
+                status = false;
+                message = "Invalid ids sent to api";
+            }
+
+            return Json(new { status = status, message = message }, JsonRequestBehavior.AllowGet);
+        }
 
         #region SendEmail
         public int GenerateOTP()

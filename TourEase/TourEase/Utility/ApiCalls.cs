@@ -97,6 +97,148 @@ namespace TourEase.Utility
                             await SecureStorageClass.SetValueAgainstKey(SecureStorageClass.keyUserEmail, usr.Email);
                             await SecureStorageClass.SetValueAgainstKey(SecureStorageClass.keyUserPassword, user.Password);
                             await SecureStorageClass.SetValueAgainstKey(SecureStorageClass.keyUserType, usr.User_Type.ToString());
+                            await SecureStorageClass.SetValueAgainstKey(SecureStorageClass.keyIsAdmin, false.ToString());
+
+                            if ((!(usr.Is_Verified ?? false)) || (!(usr.Is_Enabled ?? false)))
+                            {
+                                res = false;
+                                if (!(usr.Is_Verified ?? false))
+                                {
+                                    loginVM.User = usr;
+                                    if (await SendOTP(usr.UserId, loginVM))
+                                    {
+                                        Device.BeginInvokeOnMainThread(() =>
+                                        {
+                                            //IsBusy = false;
+                                            Application.Current.MainPage = new NavigationPage(new CodeVerificationPage(loginVM));
+                                            //await navigation.PushAsync(new CodeVerificationPage(loginVM));
+                                        });
+                                    }
+                                    else
+                                    {
+                                        SecureStorageClass.ClearAll();
+                                        Device.BeginInvokeOnMainThread(() =>
+                                        {
+                                            Application.Current.MainPage = new NavigationPage(new LoginPage());
+                                        });
+                                    }
+                                }
+                                else if (!(usr.Is_Enabled ?? false))
+                                {
+                                    Device.BeginInvokeOnMainThread(() =>
+                                    {
+                                        PopupNavigation.Instance.PushAsync(new PopupAlert("W", "Your account is disabled. Please contact TourEase management to re-enable it. Thankyou.", "OK"));
+                                    });
+                                }
+                                //else
+                                //{
+                                //    Device.BeginInvokeOnMainThread(() =>
+                                //    {
+                                //        PopupNavigation.Instance.PushAsync(new PopupAlert("W", "An error occurred while sending otp to your email.", "OK"));
+                                //    });
+                                //}
+                            }
+                            //else
+                            //{
+
+                            //    //await SecureStorage.SetAsync("oauth_token", "secret-oauth-token-value-from-api");
+                            //    Device.BeginInvokeOnMainThread(() =>
+                            //    {
+                            //        //IsBusy = false;
+                            //        if (usr.IsProfileCompleted ?? false)
+                            //        {
+                            //            Application.Current.MainPage = new AppShell();
+                            //        }
+                            //        else
+                            //        {
+                            //            usr.Password = user.Password;
+                            //            navigation.PushAsync(new FinishRegistrationPage(usr));
+                            //        }
+                            //    });
+                            //}
+                        }
+                    }
+                    else
+                    {
+                        Device.BeginInvokeOnMainThread(async () =>
+                        {
+                            //IsBusy = false;
+                            await navigation.PushPopupAsync(new PopupAlert("E", "Server error", "OK"));
+                        });
+                        //IsBusy = false;
+                        //await SendEmail(responseStatusCode, memberName, sourceFilePath, sourceLineNumber, "", "Exception From Pantex Health");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    //IsBusy = false;
+                    res = false;
+                    //await SendEmail(responseStatusCode, memberName, sourceFilePath, sourceLineNumber, ex.StackTrace, "Exception From Pantex Health");
+                }
+            }
+
+            //IsBusy = false;
+            return res;
+
+        }
+
+        public async System.Threading.Tasks.Task<bool> LoginAdmin(clsUser admin, LoginViewModel loginVM)
+        {
+            bool res = false;
+            HttpStatusCode responseStatusCode = 0;
+
+            if (await Constants.IsInternetConnected())
+            {
+                try
+                {
+                    //IsBusy = true;
+                    var Httpclient = new HttpClient();
+
+                    var url = Utility.Constants.CompleteURL + "/LoginAsAdmin";
+
+                    var uri = new Uri(string.Format(url, string.Empty));
+
+
+                    var json = JsonConvert.SerializeObject(admin);
+                    var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                    HttpResponseMessage response = null;
+
+                    response = await Httpclient.PostAsync(uri, content);
+
+                    responseStatusCode = response.StatusCode;
+
+                    if (responseStatusCode == HttpStatusCode.OK)
+                    {
+
+                        var responseContent = await response.Content.ReadAsStringAsync();
+
+                        var jObject = JObject.Parse(responseContent);
+                        bool status = (bool)jObject.GetValue("status");
+
+                        if (!status)
+                        {
+                            res = false;
+                            Device.BeginInvokeOnMainThread(async () =>
+                            {
+                                //IsBusy = false;
+                                await navigation.PushPopupAsync(new PopupAlert("E", jObject.GetValue("message").ToString(), "OK"));
+                            });
+                        }
+                        else
+                        {
+                            res = true;
+                            //bool verified = (bool)jObject.GetValue("IsVerified");
+
+                            string userObjFromApi = jObject.GetValue("user").ToString();
+                            clsUser usr = JsonConvert.DeserializeObject<clsUser>(userObjFromApi);
+
+                            await SecureStorageClass.SetValueAgainstKey(SecureStorageClass.keyUserId, usr.UserId.ToString());
+                            await SecureStorageClass.SetValueAgainstKey(SecureStorageClass.keyUserFullName, usr.Full_Name);
+                            await SecureStorageClass.SetValueAgainstKey(SecureStorageClass.keyUserEmail, usr.Email);
+                            await SecureStorageClass.SetValueAgainstKey(SecureStorageClass.keyUserPassword, admin.Password);
+                            await SecureStorageClass.SetValueAgainstKey(SecureStorageClass.keyUserType, usr.User_Type.ToString());
+                            await SecureStorageClass.SetValueAgainstKey(SecureStorageClass.keyIsAdmin, true.ToString());
 
                             if (!(usr.Is_Verified ?? false))
                             {
@@ -651,12 +793,12 @@ namespace TourEase.Utility
                         var responseContent = await response.Content.ReadAsStringAsync();
                         var apiResponse = JsonConvert.DeserializeObject<clsResponse>(responseContent);
 
+                        IsBusy = false;
                         if (response.IsSuccessStatusCode)
                         {
-                            IsBusy = false;
                             if (apiResponse.status)
                             {
-                                await PopupNavigation.Instance.PushAsync(new PopupAlert("S", "Your account is verified successfully.", "OK"));
+                                await PopupNavigation.Instance.PushAsync(new PopupAlert("S", "Account is verified successfully.", "OK"));
                                 //Application.Current.MainPage = new FinishRegistrationTechPage(UserDetail);
                                 //Application.Current.MainPage = new VerifyEmailOnRegistration(this);
                             }
@@ -790,6 +932,142 @@ namespace TourEase.Utility
                             if (apiResponse.status)
                             {
                                 await PopupNavigation.Instance.PushAsync(new PopupAlert("S", "Your request is sent successfully.", "OK"));
+                                //Application.Current.MainPage = new FinishRegistrationTechPage(UserDetail);
+                                //Application.Current.MainPage = new VerifyEmailOnRegistration(this);
+                            }
+                            else
+                            {
+                                await PopupNavigation.Instance.PushAsync(new PopupAlert("E", apiResponse.message, "OK"));
+                                //await Application.Current.MainPage.DisplayAlert("Error", apiResponse.message, "OK");
+                            }
+
+                            res = apiResponse.status;
+                        }
+                        else
+                        {
+                            await PopupNavigation.Instance.PushAsync(new PopupAlert("E", response.Content.ReadAsStringAsync().Result, "OK"));
+                            //await Application.Current.MainPage.DisplayAlert("Error", response.Content.ReadAsStringAsync().Result, "OK");
+                        }
+                    }
+
+                }
+                //else
+                //{
+                //    PopUpData popUp = new PopUpData("crossRed.png", "", GlobalData.InactiveInternet, "OK");
+                //    await Application.Current.MainPage.Navigation.PushPopupAsync(new PopUpPage(popUp));
+                //    //await Application.Current.MainPage.DisplayAlert("Internet Problem", "Its seems like your internet is not active. Please check your internet.", "OK");
+                //}
+
+            }
+            catch (Exception e)
+            {
+                await PopupNavigation.Instance.PushAsync(new PopupAlert("E", "Something wrong happened. Please try again.", "OK"));
+                //await Application.Current.MainPage.DisplayAlert("Error", "Something wrong happened. Try again", "OK");
+            }
+
+            return res;
+        }
+
+        public async Task<bool> EventRequest(int senderId, string requestMessage) // senderId is HostId of host who is hosting event and inviting guests
+        {
+            bool res = false;
+            try
+            {
+                if (await Constants.IsInternetConnected())
+                {
+                    // Connection to internet is available
+                    using (var client = new HttpClient())
+                    {
+                        var url = Constants.CompleteURL + "/EventRequest";
+
+                        var uri = new Uri(string.Format(url, string.Empty));
+
+                        var json = JsonConvert.SerializeObject(new { senderId = senderId, requestMessage = requestMessage });
+                        var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                        HttpResponseMessage response = null;
+
+                        response = await client.PostAsync(uri, content);
+                        var responseContent = await response.Content.ReadAsStringAsync();
+                        var apiResponse = JsonConvert.DeserializeObject<clsResponse>(responseContent);
+
+                        IsBusy = false;
+                        if (response.IsSuccessStatusCode)
+                        {
+                            if (apiResponse.status)
+                            {
+                                Device.BeginInvokeOnMainThread(() =>
+                                {
+                                    PopupNavigation.Instance.PushAsync(new PopupAlert("S", "Event request sent successfully.", "OK"));
+                                });
+                                //Application.Current.MainPage = new FinishRegistrationTechPage(UserDetail);
+                                //Application.Current.MainPage = new VerifyEmailOnRegistration(this);
+                            }
+                            else
+                            {
+                                await PopupNavigation.Instance.PushAsync(new PopupAlert("E", apiResponse.message, "OK"));
+                                //await Application.Current.MainPage.DisplayAlert("Error", apiResponse.message, "OK");
+                            }
+
+                            res = apiResponse.status;
+                        }
+                        else
+                        {
+                            await PopupNavigation.Instance.PushAsync(new PopupAlert("E", response.Content.ReadAsStringAsync().Result, "OK"));
+                            //await Application.Current.MainPage.DisplayAlert("Error", response.Content.ReadAsStringAsync().Result, "OK");
+                        }
+                    }
+
+                }
+                //else
+                //{
+                //    PopUpData popUp = new PopUpData("crossRed.png", "", GlobalData.InactiveInternet, "OK");
+                //    await Application.Current.MainPage.Navigation.PushPopupAsync(new PopUpPage(popUp));
+                //    //await Application.Current.MainPage.DisplayAlert("Internet Problem", "Its seems like your internet is not active. Please check your internet.", "OK");
+                //}
+
+            }
+            catch (Exception e)
+            {
+                await PopupNavigation.Instance.PushAsync(new PopupAlert("E", "Something wrong happened. Please try again.", "OK"));
+                //await Application.Current.MainPage.DisplayAlert("Error", "Something wrong happened. Try again", "OK");
+            }
+
+            return res;
+        }
+
+        public async Task<bool> CompanionRequest(int senderId, string requestMessage) // senderId is HostId of host who is hosting event and inviting guests
+        {
+            bool res = false;
+            try
+            {
+                if (await Constants.IsInternetConnected())
+                {
+                    // Connection to internet is available
+                    using (var client = new HttpClient())
+                    {
+                        var url = Constants.CompleteURL + "/CompanionRequest";
+
+                        var uri = new Uri(string.Format(url, string.Empty));
+
+                        var json = JsonConvert.SerializeObject(new { senderId = senderId, requestMessage = requestMessage });
+                        var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                        HttpResponseMessage response = null;
+
+                        response = await client.PostAsync(uri, content);
+                        var responseContent = await response.Content.ReadAsStringAsync();
+                        var apiResponse = JsonConvert.DeserializeObject<clsResponse>(responseContent);
+
+                        IsBusy = false;
+                        if (response.IsSuccessStatusCode)
+                        {
+                            if (apiResponse.status)
+                            {
+                                Device.BeginInvokeOnMainThread(() =>
+                                {
+                                    PopupNavigation.Instance.PushAsync(new PopupAlert("S", "Companion request sent successfully.", "OK"));
+                                });
                                 //Application.Current.MainPage = new FinishRegistrationTechPage(UserDetail);
                                 //Application.Current.MainPage = new VerifyEmailOnRegistration(this);
                             }
@@ -1320,6 +1598,214 @@ namespace TourEase.Utility
 
         //    return res;
         //}
+        #endregion
+
+        #region Get Users List
+        public async Task<ObservableCollection<clsUser>> GetUsersList()
+        {
+            ObservableCollection<clsUser> res = new ObservableCollection<clsUser>();
+
+            HttpStatusCode responseStatusCode = 0;
+
+            if (await Constants.IsInternetConnected())
+            {
+                try
+                {
+                    var Httpclient = new HttpClient();
+
+                    var url = Constants.CompleteURL + "/GetAllUsers";
+
+                    var uri = new Uri(string.Format(url, string.Empty));
+
+                    HttpResponseMessage response = null;
+
+                    response = await Httpclient.GetAsync(uri);
+
+                    responseStatusCode = response.StatusCode;
+
+                    if (responseStatusCode == HttpStatusCode.OK)
+                    {
+
+                        var responseContent = await response.Content.ReadAsStringAsync();
+
+                        JObject jObject = JObject.Parse(responseContent);
+                        bool status = (bool)jObject.GetValue("status");
+                        if (!status)
+                        {
+                            Device.BeginInvokeOnMainThread(async () =>
+                            {
+                                await navigation.PushPopupAsync(new PopupAlert("E", jObject.GetValue("message").ToString(), "OK"));
+                            });
+                        }
+                        else
+                        {
+                            var logj = (JArray)jObject["usersList"];
+
+                            res = logj.ToObject<ObservableCollection<clsUser>>();
+                        }
+
+                        //var los = JArray.Parse(responseContent);
+                        //res = los.ToObject<ObservableCollection<clsUserSkill>>();
+                    }
+                    else
+                    {
+                        //IsBusy = false;
+                        //await SendEmail(responseStatusCode, memberName, sourceFilePath, sourceLineNumber, "", "Exception From Pantex Health");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    //IsBusy = false;
+                    //await SendEmail(responseStatusCode, memberName, sourceFilePath, sourceLineNumber, ex.StackTrace, "Exception From Pantex Health");
+                }
+            }
+
+            //IsBusy = false;
+            return res;
+
+        }
+        #endregion
+
+        #region Enable User
+        public async Task<bool> EnableUser(int userId)
+        {
+            bool res = false;
+            IsBusy = true;
+            try
+            {
+                if (await Constants.IsInternetConnected())
+                {
+                    // Connection to internet is available
+                    using (var client = new HttpClient())
+                    {
+                        var url = Constants.CompleteURL + "/EnableUser";
+
+                        var uri = new Uri(string.Format(url, string.Empty));
+
+                        //string sessionId = await SecureStorageClass.GetValueAgainstKey(SecureStorageClass.keyUserSessionId);
+
+                        var json = JsonConvert.SerializeObject(new { id = userId });
+                        var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                        HttpResponseMessage response = null;
+
+                        response = await client.PostAsync(uri, content);
+                        var responseContent = await response.Content.ReadAsStringAsync();
+                        var apiResponse = JsonConvert.DeserializeObject<clsResponse>(responseContent);
+
+                        IsBusy = false;
+                        if (response.IsSuccessStatusCode)
+                        {
+                            if (apiResponse.status)
+                            {
+                                await PopupNavigation.Instance.PushAsync(new PopupAlert("S", "Account enabled successfully.", "OK"));
+                                //Application.Current.MainPage = new FinishRegistrationTechPage(UserDetail);
+                                //Application.Current.MainPage = new VerifyEmailOnRegistration(this);
+                            }
+                            else
+                            {
+                                await PopupNavigation.Instance.PushAsync(new PopupAlert("E", apiResponse.message, "OK"));
+                                //await Application.Current.MainPage.DisplayAlert("Error", apiResponse.message, "OK");
+                            }
+
+                            res = apiResponse.status;
+                        }
+                        else
+                        {
+                            await PopupNavigation.Instance.PushAsync(new PopupAlert("E", response.Content.ReadAsStringAsync().Result, "OK"));
+                            //await Application.Current.MainPage.DisplayAlert("Error", response.Content.ReadAsStringAsync().Result, "OK");
+                        }
+                    }
+
+                }
+                //else
+                //{
+                //    PopUpData popUp = new PopUpData("crossRed.png", "", GlobalData.InactiveInternet, "OK");
+                //    await Application.Current.MainPage.Navigation.PushPopupAsync(new PopUpPage(popUp));
+                //    //await Application.Current.MainPage.DisplayAlert("Internet Problem", "Its seems like your internet is not active. Please check your internet.", "OK");
+                //}
+
+            }
+            catch (Exception e)
+            {
+                await PopupNavigation.Instance.PushAsync(new PopupAlert("E", "Something wrong happened. Please try again.", "OK"));
+                //await Application.Current.MainPage.DisplayAlert("Error", "Something wrong happened. Try again", "OK");
+            }
+            IsBusy = false;
+
+            return res;
+        }
+        #endregion
+
+        #region Disable User
+        public async Task<bool> DisableUser(int userId)
+        {
+            bool res = false;
+            IsBusy = true;
+            try
+            {
+                if (await Constants.IsInternetConnected())
+                {
+                    // Connection to internet is available
+                    using (var client = new HttpClient())
+                    {
+                        var url = Constants.CompleteURL + "/DisableUser";
+
+                        var uri = new Uri(string.Format(url, string.Empty));
+
+                        //string sessionId = await SecureStorageClass.GetValueAgainstKey(SecureStorageClass.keyUserSessionId);
+
+                        var json = JsonConvert.SerializeObject(new { id = userId });
+                        var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                        HttpResponseMessage response = null;
+
+                        response = await client.PostAsync(uri, content);
+                        var responseContent = await response.Content.ReadAsStringAsync();
+                        var apiResponse = JsonConvert.DeserializeObject<clsResponse>(responseContent);
+
+                        IsBusy = false;
+                        if (response.IsSuccessStatusCode)
+                        {
+                            if (apiResponse.status)
+                            {
+                                await PopupNavigation.Instance.PushAsync(new PopupAlert("S", "Account disabled successfully.", "OK"));
+                                //Application.Current.MainPage = new FinishRegistrationTechPage(UserDetail);
+                                //Application.Current.MainPage = new VerifyEmailOnRegistration(this);
+                            }
+                            else
+                            {
+                                await PopupNavigation.Instance.PushAsync(new PopupAlert("E", apiResponse.message, "OK"));
+                                //await Application.Current.MainPage.DisplayAlert("Error", apiResponse.message, "OK");
+                            }
+
+                            res = apiResponse.status;
+                        }
+                        else
+                        {
+                            await PopupNavigation.Instance.PushAsync(new PopupAlert("E", response.Content.ReadAsStringAsync().Result, "OK"));
+                            //await Application.Current.MainPage.DisplayAlert("Error", response.Content.ReadAsStringAsync().Result, "OK");
+                        }
+                    }
+
+                }
+                //else
+                //{
+                //    PopUpData popUp = new PopUpData("crossRed.png", "", GlobalData.InactiveInternet, "OK");
+                //    await Application.Current.MainPage.Navigation.PushPopupAsync(new PopUpPage(popUp));
+                //    //await Application.Current.MainPage.DisplayAlert("Internet Problem", "Its seems like your internet is not active. Please check your internet.", "OK");
+                //}
+
+            }
+            catch (Exception e)
+            {
+                await PopupNavigation.Instance.PushAsync(new PopupAlert("E", "Something wrong happened. Please try again.", "OK"));
+                //await Application.Current.MainPage.DisplayAlert("Error", "Something wrong happened. Try again", "OK");
+            }
+            IsBusy = false;
+
+            return res;
+        }
         #endregion
     }
 }

@@ -18,5 +18,11 @@ namespace TourEase.Views
 			InitializeComponent ();
 			BindingContext = new RequestDetailViewModel(request, option, Navigation);
 		}
+
+		public RequestDetailPage(HomePageViewModel vm)
+        {
+			InitializeComponent();
+			BindingContext = vm;
+        }
 	}
 }

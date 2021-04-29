@@ -167,6 +167,21 @@ namespace TourEase.ViewModels
                 OnPropertyChanged();
             }
         }
+
+        string _CompanionEventTitle;
+        public string CompanionEventTitle
+        {
+            get => _CompanionEventTitle;
+            set
+            {
+                if (value != null)
+                {
+                    _CompanionEventTitle = value;
+                }
+                OnPropertyChanged();
+            }
+        }
+
         ObservableCollection<clsUser> _GuestsHostsList;
         public ObservableCollection<clsUser> GuestsHostsList
         {
@@ -222,6 +237,7 @@ namespace TourEase.ViewModels
             int userType = Convert.ToInt32(await SecureStorageClass.GetValueAgainstKey(SecureStorageClass.keyUserType));
 
             HomeTitle = userType == 1 ? "Hosts List" : "Guests List"; // 1 means guest is login so title will be "Hosts List",,, otherwise title will be "Guests List"
+            CompanionEventTitle = userType == 1 ? "Companion Request" : "Event Request"; // Guest can only send companion request, and host can only send event request
 
             await RefreshGuestsHostsList();
         }
@@ -313,5 +329,43 @@ namespace TourEase.ViewModels
                 });
             }
         }
+
+        #region Companion Event Request
+        clsRequest _Request;
+        public clsRequest Request
+        {
+            get => _Request;
+            set
+            {
+                if(value != null)
+                {
+                    _Request = value;
+                }
+                OnPropertyChanged();
+            }
+        }
+
+        public Command CompanionEventRequestsCommand
+        {
+            get
+            {
+                return new Command(async () =>
+                {
+                    int userType = Convert.ToInt32(await SecureStorageClass.GetValueAgainstKey(SecureStorageClass.keyUserType));
+                    int userId = Convert.ToInt32(await SecureStorageClass.GetValueAgainstKey(SecureStorageClass.keyUserId));
+
+                    //userType == 1 ? "Companion Request" : "Event Request";
+                    if (userType == 1)
+                    {
+                        await navigation.PushAsync(new CompanionRequest());
+                    }
+                    else
+                    {
+                        await navigation.PushAsync(new EventRequest());
+                    }
+                });
+            }
+        }
+        #endregion
     }
 }

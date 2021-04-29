@@ -14,6 +14,7 @@ namespace TourEase.Utility
         public static string keyUserEmail { get; set; } = "UserEmail";
         public static string keyUserPassword { get; set; } = "UserPassword";
         public static string keyUserType { get; set; } = "UserContact";
+        public static string keyIsAdmin { get; set; } = "IsAdmin";
         #endregion
 
         public static async Task<bool> SetValueAgainstKey(string key, string val)
