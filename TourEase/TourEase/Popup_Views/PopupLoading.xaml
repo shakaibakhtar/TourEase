@@ -17,7 +17,7 @@
       HasBackgroundAnimation="True"/>
     </pages:PopupPage.Animation>
     <StackLayout VerticalOptions="Center" HorizontalOptions="Center">
-        <ActivityIndicator x:Name="actind"  Color="#FA4248"></ActivityIndicator>
+        <ActivityIndicator x:Name="actind"  Color="#EC4134"></ActivityIndicator>
         <Label Text="Please Wait" TextColor="White" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand" FontSize="16"></Label>
     </StackLayout>
 </pages:PopupPage>

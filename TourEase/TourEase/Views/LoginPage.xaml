@@ -12,7 +12,7 @@
         <ScrollView>
             <StackLayout Padding="25, 0">
                 <StackLayout VerticalOptions="Start">
-                    <Label VerticalOptions="Center" HorizontalOptions="CenterAndExpand" Text="Tour" FontSize="Title" TextColor="#FA4248"/>
+                    <Label VerticalOptions="Center" HorizontalOptions="CenterAndExpand" Text="Tour" FontSize="Title" TextColor="#EC4134"/>
                     <Label VerticalOptions="Start" HorizontalOptions="CenterAndExpand" Text="Ease" FontSize="Large" TextColor="Black" />
                 </StackLayout>
 
@@ -21,7 +21,7 @@
                     <Entry Text="{Binding User.Email}" HorizontalOptions="FillAndExpand" />
                     <Label HorizontalOptions="Start" Text="Password" FontSize="Small" TextColor="#7F7F7F"/>
                     <Entry Text="{Binding User.Password}" HorizontalOptions="FillAndExpand"  IsPassword="True"/>
-                    <Label HorizontalOptions="End" Text="Forgot Password?">
+                    <Label HorizontalOptions="End" TextDecorations="Underline" Text="Forgot Password?">
                         <Label.GestureRecognizers>
                             <TapGestureRecognizer NumberOfTapsRequired="1" Command="{Binding GotoForgotPasswordCommand}"/>
                         </Label.GestureRecognizers>
@@ -31,11 +31,11 @@
                         <RadioButton Content="User" />
                         <RadioButton Content="Admin" IsChecked="{Binding IsAdmin, Mode=TwoWay}"/>
                     </StackLayout>
-                    <Button HorizontalOptions="FillAndExpand" Text="Sign In" BackgroundColor="#FA4248" TextColor="White" Command="{Binding LoginCommand}"/>
+                    <Button HorizontalOptions="FillAndExpand" Text="Sign In" BackgroundColor="#EC4134" TextColor="White" CornerRadius="20" Command="{Binding LoginCommand}"/>
                 </StackLayout>
                 <StackLayout Orientation="Horizontal" VerticalOptions="EndAndExpand" HorizontalOptions="CenterAndExpand" Padding="0, 0, 0, 20">
                     <Label HorizontalOptions="Center" Text="Need an Account?"/>
-                    <Label HorizontalOptions="Start" Text="Sign Up" TextColor="#FA4248">
+                    <Label HorizontalOptions="Start" Text="Sign Up" TextColor="#EC4134">
                         <Label.GestureRecognizers>
                             <TapGestureRecognizer Command="{Binding NavigateToSignUpCommand}"/>
                         </Label.GestureRecognizers>

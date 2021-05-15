@@ -26,8 +26,7 @@
                     <Entry Text="{Binding Contact, TargetNullValue='', Mode=TwoWay}" FontSize="Small" HorizontalOptions="FillAndExpand"/>
                 </StackLayout>
 
-
-                <Button Command="{Binding AdvanceSearchCommand}" Text="Search" HorizontalOptions="CenterAndExpand"/>
+                <Button HorizontalOptions="Center" Text="Search" BackgroundColor="#EC4134" TextColor="White" CornerRadius="20" Command="{Binding AdvanceSearchCommand}"/>
             </StackLayout>
         </ScrollView>
     </ContentPage.Content>

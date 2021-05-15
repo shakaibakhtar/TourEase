@@ -110,7 +110,7 @@
                 <Label Grid.Row="8" Grid.ColumnSpan="2" Text="Request Accepted" TextColor="Green" FontAttributes="Bold" IsVisible="{Binding Request.IsAccepted}"/>
 
                 <StackLayout Grid.Row="8" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalOptions="CenterAndExpand">
-                    <Button Text="Accept" BackgroundColor="Green" TextColor="White" Command="{Binding AcceptRequestCommand}">
+                    <Button Text="Accept" BackgroundColor="Transparent" BorderColor="#6CAA06" BorderWidth="1" CornerRadius="20" TextColor="White" Command="{Binding AcceptRequestCommand}">
                         <Button.Triggers>
                             <DataTrigger TargetType="Button" Binding="{Binding option}" Value="received">
                                 <Setter Property="IsEnabled" Value="True"/>
@@ -120,7 +120,7 @@
                             </DataTrigger>
                         </Button.Triggers>
                     </Button>
-                    <Button Text="Ignore" BackgroundColor="Red" TextColor="White" Command="{Binding RejectRequestCommand}">
+                    <Button Text="Ignore" BackgroundColor="Transparent" BorderColor="#EC4134" BorderWidth="1" CornerRadius="20" TextColor="White" Command="{Binding RejectRequestCommand}">
                         <Button.Triggers>
                             <DataTrigger TargetType="Button" Binding="{Binding option}" Value="received">
                                 <Setter Property="IsEnabled" Value="True"/>
@@ -141,7 +141,7 @@
                     </StackLayout.Triggers>
                 </StackLayout>
 
-                <Button Grid.Row="9" Grid.ColumnSpan="2" Text="Finish" HorizontalOptions="FillAndExpand" Command="{Binding FinishAndGiveRatingCommand}" IsEnabled="False" IsVisible="{Binding Request.IsAccepted}">
+                <Button Grid.Row="9" Grid.ColumnSpan="2" CornerRadius="20" Text="Finish" HorizontalOptions="FillAndExpand" Command="{Binding FinishAndGiveRatingCommand}" IsEnabled="False" IsVisible="{Binding Request.IsAccepted}">
                     <Button.Triggers>
                         <DataTrigger TargetType="Button" Binding="{Binding Request.RatingValue}" Value="0">
                             <Setter Property="IsEnabled" Value="True"/>

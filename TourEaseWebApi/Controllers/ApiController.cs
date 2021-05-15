@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Mail;
-using System.Threading.Tasks;
-using System.Web;
 using System.Web.Mvc;
 using TourEaseWebApi.Models;
 
@@ -1068,6 +1066,54 @@ namespace TourEaseWebApi.Controllers
             }
 
             return Json(new { status = status, message = message }, JsonRequestBehavior.AllowGet);
+        }
+
+        [ValidateInput(false)]
+        [HttpPost]
+        public ActionResult UpdateProfile(clsUser User)
+        {
+            bool status = false;
+            string message = "";
+            bool IsVerified = false;
+
+            if (User != null)
+            {
+                try
+                {
+                    var tmp = db.tblUsers.Where(x => x.UserId == User.UserId).FirstOrDefault();
+                    if (tmp != null)
+                    {
+                        tmp.Full_Name = User.Full_Name;
+                        tmp.Password = User.Password;
+                        tmp.Contact_Number = User.Contact_Number;
+                        db.SaveChanges();
+
+                        status = true;
+                        message = "Your profile has been updated successfully.";
+                        IsVerified = tmp.Is_Verified ?? false;
+                    }
+                    else
+                    {
+                        status = false;
+                        message = "Email not found.";
+                        IsVerified = false;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    status = false;
+                    message = ex.Message;
+                    IsVerified = false;
+                }
+            }
+            else
+            {
+                status = false;
+                message = "Invalid user id sent to api";
+                IsVerified = false;
+            }
+
+            return Json(new { status = status, message = message, IsVerified = IsVerified }, JsonRequestBehavior.AllowGet);
         }
 
         #region SendEmail

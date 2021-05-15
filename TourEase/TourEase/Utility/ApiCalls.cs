@@ -1807,5 +1807,103 @@ namespace TourEase.Utility
             return res;
         }
         #endregion
+
+        #region Update Password ApiCall
+        public async Task<bool> UpdateProfile(clsUser usr)
+        {
+            bool res = false;
+            HttpStatusCode responseStatusCode = 0;
+
+            if (await Constants.IsInternetConnected())
+            {
+                try
+                {
+                    //IsBusy = true;
+                    var Httpclient = new HttpClient();
+
+                    var url = Utility.Constants.CompleteURL + "/UpdateProfile";
+
+                    var uri = new Uri(string.Format(url, string.Empty));
+
+                    usr.UserId = Convert.ToInt32(await SecureStorageClass.GetValueAgainstKey(SecureStorageClass.keyUserId));
+
+                    var json = JsonConvert.SerializeObject(new { user = usr });
+                    var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                    HttpResponseMessage response = null;
+
+                    response = await Httpclient.PostAsync(uri, content);
+
+                    responseStatusCode = response.StatusCode;
+
+                    if (responseStatusCode == HttpStatusCode.OK)
+                    {
+
+                        var responseContent = await response.Content.ReadAsStringAsync();
+
+                        var jObject = JObject.Parse(responseContent);
+                        bool status = (bool)jObject.GetValue("status");
+
+                        if (!status)
+                        {
+                            Device.BeginInvokeOnMainThread(async () =>
+                            {
+                                await navigation.PushPopupAsync(new PopupAlert("E", jObject.GetValue("message").ToString(), "OK"));
+                            });
+                        }
+                        else
+                        {
+
+                            if (usr != null)
+                            {
+                                await SecureStorageClass.SetValueAgainstKey(SecureStorageClass.keyUserFullName, usr.Full_Name);
+                                await SecureStorageClass.SetValueAgainstKey(SecureStorageClass.keyUserPassword, usr.Password);
+                                await SecureStorageClass.SetValueAgainstKey(SecureStorageClass.keyUserPassword, usr.Password.ToString());
+
+
+                                //Device.BeginInvokeOnMainThread(() =>
+                                //{
+                                //    IsBusy = false;
+
+                                //    if (usr.Is_Verified ?? false)
+                                //    {
+                                //        Application.Current.MainPage = new HomePage();
+                                //    }
+                                //    else
+                                //    {
+                                //        Application.Current.MainPage = new LoginPage();
+                                //    }
+                                //});
+                            }
+                        }
+
+                        res = status;
+                    }
+                    else
+                    {
+                        //IsBusy = false;
+                        await navigation.PushPopupAsync(new PopupAlert("E", "Internal Server Error", "OK"));
+                        //await SendEmail(responseStatusCode, memberName, sourceFilePath, sourceLineNumber, "", "Exception From Pantex Health");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    //IsBusy = false;
+                    res = false;
+                    await navigation.PushPopupAsync(new PopupAlert("E", ex.Message, "OK"));
+                    //await SendEmail(responseStatusCode, memberName, sourceFilePath, sourceLineNumber, ex.StackTrace, "Exception From Pantex Health");
+                }
+                finally
+                {
+                    Device.BeginInvokeOnMainThread(() =>
+                    {
+                        IsBusy = false;
+                    });
+                }
+            }
+            return res;
+
+        }
+        #endregion
     }
 }

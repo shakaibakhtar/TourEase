@@ -270,7 +270,7 @@ namespace TourEase.ViewModels
                 return new Command(() =>
                 {
                     SecureStorageClass.ClearAll();
-                    Application.Current.MainPage = new LoginPage();
+                    Application.Current.MainPage = new NavigationPage(new LoginPage());
                 });
             }
         }
@@ -326,6 +326,17 @@ namespace TourEase.ViewModels
                 return new Command(() =>
                 {
                     navigation.PushAsync(new ChatWindowPage());
+                });
+            }
+        }
+
+        public Command UpdateProfilePageCommand
+        {
+            get
+            {
+                return new Command(() =>
+                {
+                    navigation.PushAsync(new UpdateProfilePage());
                 });
             }
         }

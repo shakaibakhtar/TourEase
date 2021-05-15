@@ -31,7 +31,7 @@
                 <Label HorizontalOptions="Start" Text="Message:" FontAttributes="Bold" FontSize="Medium" TextColor="#7F7F7F"/>
                 <Editor Text="{Binding RequestMessage}" HeightRequest="100" HorizontalOptions="FillAndExpand"/>
 
-                <Button HorizontalOptions="FillAndExpand" Text="Send" BackgroundColor="#FA4248" TextColor="White" Command="{Binding SendEventRequestCommand}"/>
+                <Button HorizontalOptions="FillAndExpand" Text="Send" BackgroundColor="#EC4134" TextColor="White" CornerRadius="20" Command="{Binding SendEventRequestCommand}"/>
             </StackLayout>
         </StackLayout>
     </ContentPage.Content>

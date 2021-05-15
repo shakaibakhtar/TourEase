@@ -118,7 +118,7 @@ namespace TourEase.Admin_ViewModels
                 return new Command(() =>
                 {
                     SecureStorageClass.ClearAll();
-                    Application.Current.MainPage = new LoginPage();
+                    Application.Current.MainPage = new NavigationPage(new LoginPage());
                 });
             }
         }

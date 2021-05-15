@@ -37,7 +37,8 @@
                         </FormattedString>
                     </Label.FormattedText>
                 </Label>
-                <Button Text="Next" HorizontalOptions="Center" Command="{Binding VerifyCodeCommand}"/>
+                
+                <Button HorizontalOptions="Center" Text="Next" BackgroundColor="#EC4134" TextColor="White" CornerRadius="20" Command="{Binding VerifyCodeCommand}"/>
             </StackLayout>
         </ScrollView>
     </ContentPage.Content>

@@ -4,10 +4,10 @@
              x:Class="TourEase.Views.SplashScreen">
     <ContentPage.Content>
         <StackLayout VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand">
-            <Label VerticalOptions="Center" HorizontalOptions="CenterAndExpand" Text="Tour" FontSize="Title" TextColor="#FA4248"/>
+            <Label VerticalOptions="Center" HorizontalOptions="CenterAndExpand" Text="Tour" FontSize="Title" TextColor="#EC4134"/>
             <Label VerticalOptions="Start" HorizontalOptions="CenterAndExpand" Text="Ease" FontSize="Large" TextColor="Black" />
 
-            <ActivityIndicator Color="#FA4248" IsRunning="True" WidthRequest="20" HeightRequest="20"/>
+            <ActivityIndicator Color="#EC4134" IsRunning="True" WidthRequest="20" HeightRequest="20"/>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>
