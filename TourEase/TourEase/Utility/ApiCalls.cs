@@ -3,7 +3,6 @@ using Newtonsoft.Json.Linq;
 using Rg.Plugins.Popup.Extensions;
 using Rg.Plugins.Popup.Services;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Net;
 using System.Net.Http;
@@ -315,7 +314,7 @@ namespace TourEase.Utility
         #endregion
 
         #region Register ApiCall
-        public async System.Threading.Tasks.Task<bool> RegisterUser(clsUser user)
+        public async System.Threading.Tasks.Task<bool> RegisterUser(clsUser user, RegisterViewModel regVM)
         {
             bool res = false;
             HttpStatusCode responseStatusCode = 0;
@@ -348,6 +347,7 @@ namespace TourEase.Utility
 
                         var jObject = JObject.Parse(responseContent);
                         bool status = (bool)jObject.GetValue("status");
+                        regVM.CodeFromApi = jObject.GetValue("otp").ToString();
 
                         if (!status)
                         {
@@ -362,9 +362,10 @@ namespace TourEase.Utility
 
                             //bool verified = (bool)jObject.GetValue("IsVerified");
 
-                            string userIdFromApi = jObject.GetValue("returnId").ToString();
+                            int userIdFromApi = (Int32)jObject.GetValue("returnId");
+                            regVM.User.UserId = userIdFromApi;
 
-                            await SecureStorageClass.SetValueAgainstKey(SecureStorageClass.keyUserId, userIdFromApi);
+                            await SecureStorageClass.SetValueAgainstKey(SecureStorageClass.keyUserId, userIdFromApi.ToString());
                             await SecureStorageClass.SetValueAgainstKey(SecureStorageClass.keyUserFullName, user.Full_Name);
                             await SecureStorageClass.SetValueAgainstKey(SecureStorageClass.keyUserEmail, user.Email);
                             await SecureStorageClass.SetValueAgainstKey(SecureStorageClass.keyUserPassword, user.Password);

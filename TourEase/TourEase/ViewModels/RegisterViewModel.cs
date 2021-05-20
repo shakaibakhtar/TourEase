@@ -89,7 +89,7 @@ namespace TourEase.ViewModels
 
                     if (await ValidateInputs())
                     {
-                        if (await api.RegisterUser(User))
+                        if (await api.RegisterUser(User, this))
                         {
                             Application.Current.MainPage = new CodeVerificationPage(this);
                             //Application.Current.MainPage = new NavigationPage(new HomePage());
@@ -127,7 +127,7 @@ namespace TourEase.ViewModels
                         {
 
                             //await PopupNavigation.Instance.PushAsync(new PopupAlert("S", GlobalData.AccountVerified, "OK"));
-                            Application.Current.MainPage = new HomePage();
+                            Application.Current.MainPage = new NavigationPage(new HomePage());
                             //await navigation.PushAsync(new FinishRegistrationPage(User));
                         }
                     }
