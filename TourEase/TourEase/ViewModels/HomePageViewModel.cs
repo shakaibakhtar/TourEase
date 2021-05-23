@@ -112,25 +112,25 @@ namespace TourEase.ViewModels
 
             if (!string.IsNullOrEmpty(FullName))
             {
-                filterFullName = GuestsHostsList.Where(x => ((!string.IsNullOrEmpty(x.Full_Name)) && x.Full_Name.ToLower().Contains(FullName))).ToList();
+                filterFullName = GuestsHostsList.Where(x => ((!string.IsNullOrEmpty(x.Full_Name)) && x.Full_Name.ToLower().Contains(FullName.ToLower()))).ToList();
 
                 filter = filter.Intersect(filterFullName).ToList();
             }
             if (!string.IsNullOrEmpty(Contact))
             {
-                filterContact = GuestsHostsList.Where(x => ((!string.IsNullOrEmpty(x.Contact_Number)) && x.Contact_Number.ToLower().Contains(Contact))).ToList();
+                filterContact = GuestsHostsList.Where(x => ((!string.IsNullOrEmpty(x.Contact_Number)) && x.Contact_Number.ToLower().Contains(Contact.ToLower()))).ToList();
 
                 filter = filter.Intersect(filterContact).ToList();
             }
             if (!string.IsNullOrEmpty(SelectedCity))
             {
-                filterCity = GuestsHostsList.Where(x => ((!string.IsNullOrEmpty(x.Location_City)) && x.Location_City.ToLower().Contains(SelectedCity))).ToList();
+                filterCity = GuestsHostsList.Where(x => ((!string.IsNullOrEmpty(x.Location_City)) && x.Location_City.ToLower().Contains(SelectedCity.ToLower()))).ToList();
 
                 filter = filter.Intersect(filterCity).ToList();
             }
             if (!string.IsNullOrEmpty(SelectedArea))
             {
-                filterArea = GuestsHostsList.Where(x => ((!string.IsNullOrEmpty(x.Location_Area)) && x.Location_Area.ToLower().Contains(SelectedArea))).ToList();
+                filterArea = GuestsHostsList.Where(x => ((!string.IsNullOrEmpty(x.Location_Area)) && x.Location_Area.ToLower().Contains(SelectedArea.ToLower()))).ToList();
 
                 filter = filter.Intersect(filterArea).ToList();
             }
@@ -206,7 +206,7 @@ namespace TourEase.ViewModels
                 if (value != null)
                 {
                     _SearchableList = value;
-                    Cities = new ObservableCollection<string>(GuestsHostsList.Select(x => x.Location_City).ToList());
+                    Cities = new ObservableCollection<string>(GuestsHostsList.Select(x => x.Location_City).Distinct().ToList());
                 }
                 OnPropertyChanged();
             }
