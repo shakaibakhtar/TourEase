@@ -152,6 +152,17 @@ namespace TourEase.ViewModels
             }
         }
 
+        public Command CancelRequestCommand
+        {
+            get
+            {
+                return new Command(async () =>
+                {
+                    await navigation.PushPopupAsync(new PopupAlert("I", "You have cancelled successfully.", "OK"));
+                });
+            }
+        }
+
         #region Give Rating Popup
         public Command SaveRatingCommand
         {

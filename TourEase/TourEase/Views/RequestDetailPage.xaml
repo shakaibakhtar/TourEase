@@ -141,16 +141,29 @@
                     </StackLayout.Triggers>
                 </StackLayout>
 
-                <Button Grid.Row="9" Grid.ColumnSpan="2" CornerRadius="20" Text="Finish" HorizontalOptions="FillAndExpand" Command="{Binding FinishAndGiveRatingCommand}" IsEnabled="False" IsVisible="{Binding Request.IsAccepted}">
-                    <Button.Triggers>
-                        <DataTrigger TargetType="Button" Binding="{Binding Request.RatingValue}" Value="0">
-                            <Setter Property="IsEnabled" Value="True"/>
-                        </DataTrigger>
-                        <DataTrigger TargetType="Button" Binding="{Binding option}" Value="sent">
-                            <Setter Property="IsEnabled" Value="False"/>
-                        </DataTrigger>
-                    </Button.Triggers>
-                </Button>
+                <StackLayout Grid.Row="9" Grid.ColumnSpan="2">
+                    <Button CornerRadius="20" Text="Cancel" HorizontalOptions="FillAndExpand" Command="{Binding CancelRequestCommand}" IsEnabled="False" IsVisible="{Binding Request.IsAccepted}">
+                        <Button.Triggers>
+                            <DataTrigger TargetType="Button" Binding="{Binding Request.RatingValue}" Value="0">
+                                <Setter Property="IsEnabled" Value="True"/>
+                            </DataTrigger>
+                            <DataTrigger TargetType="Button" Binding="{Binding option}" Value="sent">
+                                <Setter Property="IsEnabled" Value="False"/>
+                            </DataTrigger>
+                        </Button.Triggers>
+                    </Button>
+                    
+                    <Button CornerRadius="20" Text="Finish" HorizontalOptions="FillAndExpand" Command="{Binding FinishAndGiveRatingCommand}" IsEnabled="False" IsVisible="{Binding Request.IsAccepted}">
+                        <Button.Triggers>
+                            <DataTrigger TargetType="Button" Binding="{Binding Request.RatingValue}" Value="0">
+                                <Setter Property="IsEnabled" Value="True"/>
+                            </DataTrigger>
+                            <DataTrigger TargetType="Button" Binding="{Binding option}" Value="sent">
+                                <Setter Property="IsEnabled" Value="False"/>
+                            </DataTrigger>
+                        </Button.Triggers>
+                    </Button>
+                </StackLayout>                
             </Grid>
         </ScrollView>
     </ContentPage.Content>
