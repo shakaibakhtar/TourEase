@@ -1340,9 +1340,9 @@ namespace TourEase.Utility
 
                         var uri = new Uri(string.Format(url, string.Empty));
 
-                        //string sessionId = await SecureStorageClass.GetValueAgainstKey(SecureStorageClass.keyUserSessionId);
+                        string userId = await SecureStorageClass.GetValueAgainstKey(SecureStorageClass.keyUserId);
 
-                        var json = JsonConvert.SerializeObject(new { requestId = requestId });
+                        var json = JsonConvert.SerializeObject(new { requestId = requestId, userId = userId });
                         var content = new StringContent(json, Encoding.UTF8, "application/json");
 
                         HttpResponseMessage response = null;
@@ -1408,9 +1408,9 @@ namespace TourEase.Utility
 
                         var uri = new Uri(string.Format(url, string.Empty));
 
-                        //string sessionId = await SecureStorageClass.GetValueAgainstKey(SecureStorageClass.keyUserSessionId);
+                        string userId = await SecureStorageClass.GetValueAgainstKey(SecureStorageClass.keyUserId);
 
-                        var json = JsonConvert.SerializeObject(new { requestId = requestId });
+                        var json = JsonConvert.SerializeObject(new { requestId = requestId, userId = userId });
                         var content = new StringContent(json, Encoding.UTF8, "application/json");
 
                         HttpResponseMessage response = null;

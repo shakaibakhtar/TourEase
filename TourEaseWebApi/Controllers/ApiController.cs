@@ -712,7 +712,7 @@ namespace TourEaseWebApi.Controllers
 
         [ValidateInput(false)]
         [HttpPost]
-        public ActionResult AcceptGuestRequest(int requestId)
+        public ActionResult AcceptGuestRequest(int requestId, int userId)
         {
             bool status = false;
             string message = "";
@@ -721,19 +721,27 @@ namespace TourEaseWebApi.Controllers
             {
                 try
                 {
-                    var tmp = db.tblGuestRequests.Where(x => x.GuestRequestId == requestId).FirstOrDefault();
-                    if (tmp != null)
+                    if (db.tblGuestRequests.Where(x => x.GuestId == userId && (x.RatingValue ?? 0) == 0 && (x.IsAccepted ?? false) == true).ToList().Count == 0)
                     {
-                        tmp.IsAccepted = true;
-                        db.SaveChanges();
+                        var tmp = db.tblGuestRequests.Where(x => x.GuestRequestId == requestId).FirstOrDefault();
+                        if (tmp != null)
+                        {
+                            tmp.IsAccepted = true;
+                            db.SaveChanges();
 
-                        status = true;
-                        message = "Request has been accepted successfully.";
+                            status = true;
+                            message = "Request has been accepted successfully.";
+                        }
+                        else
+                        {
+                            status = false;
+                            message = "System ran into a problem, please try again later.";
+                        }
                     }
                     else
                     {
                         status = false;
-                        message = "System ran into a problem, please try again later.";
+                        message = "You have already accepted a request.";
                     }
                 }
                 catch (Exception ex)
@@ -753,7 +761,7 @@ namespace TourEaseWebApi.Controllers
 
         [ValidateInput(false)]
         [HttpPost]
-        public ActionResult AcceptHostRequest(int requestId)
+        public ActionResult AcceptHostRequest(int requestId, int userId)
         {
             bool status = false;
             string message = "";
@@ -762,19 +770,27 @@ namespace TourEaseWebApi.Controllers
             {
                 try
                 {
-                    var tmp = db.tblHostRequests.Where(x => x.RequestId == requestId).FirstOrDefault();
-                    if (tmp != null)
+                    if (db.tblGuestRequests.Where(x => x.GuestId == userId && (x.RatingValue ?? 0) == 0 && (x.IsAccepted ?? false) == true).ToList().Count == 0)
                     {
-                        tmp.IsAccepted = true;
-                        db.SaveChanges();
+                        var tmp = db.tblHostRequests.Where(x => x.RequestId == requestId).FirstOrDefault();
+                        if (tmp != null)
+                        {
+                            tmp.IsAccepted = true;
+                            db.SaveChanges();
 
-                        status = true;
-                        message = "Request has been accepted successfully.";
+                            status = true;
+                            message = "Request has been accepted successfully.";
+                        }
+                        else
+                        {
+                            status = false;
+                            message = "System ran into a problem, please try again later.";
+                        }
                     }
                     else
                     {
                         status = false;
-                        message = "System ran into a problem, please try again later.";
+                        message = "You have already accepted a request.";
                     }
                 }
                 catch (Exception ex)
